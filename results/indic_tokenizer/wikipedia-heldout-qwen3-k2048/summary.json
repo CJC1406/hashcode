@@ -1,0 +1,260 @@
+{
+  "label": "TRAINING-SOURCE HELD-OUT SPLIT (Wikipedia; documents excluded from candidate selection; same source, NOT independent evaluation)",
+  "source": {
+    "kind": "training-heldout",
+    "files": [
+      {
+        "file": "hiwiki-20261001-articles.jsonl",
+        "sha256": "1a0dec701c7ee2444902fe73f20431cfae419ce5c1f97d6ac6b47b000ad319c6"
+      },
+      {
+        "file": "knwiki-20261001-articles.jsonl",
+        "sha256": "14becc475ea7bf95c6ab9fdb12c751f526009df1a6185841ae0349b9637350f8"
+      }
+    ],
+    "heldout_documents": 10586,
+    "split": "sha256(doc_id) mod 20 == 0 (excluded from candidate selection)"
+  },
+  "samples": 154459,
+  "groups": {
+    "hi": {
+      "group": "hi",
+      "samples": 102057,
+      "chars": 13665295,
+      "A_tokens": 12644616,
+      "A_tokens_per_sentence": 123.898,
+      "A_tokens_per_1000_chars": 925.309,
+      "A_exact_round_trip": 102057,
+      "A_exact_after_nfc": 102057,
+      "A_ids_valid": true,
+      "B_tokens": 7994239,
+      "B_tokens_per_sentence": 78.331,
+      "B_tokens_per_1000_chars": 585.003,
+      "B_exact_round_trip": 102057,
+      "B_exact_after_nfc": 102057,
+      "B_ids_valid": true,
+      "B_reduction_percent": 36.778,
+      "B_samples_improved": 94536,
+      "B_samples_worse": 0,
+      "B_samples_using_added_tokens": 94602,
+      "B_added_token_share_percent": 20.473,
+      "C_tokens": 7292847,
+      "C_tokens_per_sentence": 71.459,
+      "C_tokens_per_1000_chars": 533.677,
+      "C_exact_round_trip": 102057,
+      "C_exact_after_nfc": 102057,
+      "C_ids_valid": true,
+      "C_reduction_percent": 42.324,
+      "C_samples_improved": 84745,
+      "C_samples_worse": 0,
+      "C_samples_using_added_tokens": 84749,
+      "C_added_token_share_percent": 24.18
+    },
+    "en": {
+      "group": "en",
+      "samples": 7841,
+      "chars": 394278,
+      "A_tokens": 118109,
+      "A_tokens_per_sentence": 15.063,
+      "A_tokens_per_1000_chars": 299.558,
+      "A_exact_round_trip": 7841,
+      "A_exact_after_nfc": 7841,
+      "A_ids_valid": true,
+      "B_tokens": 117657,
+      "B_tokens_per_sentence": 15.005,
+      "B_tokens_per_1000_chars": 298.411,
+      "B_exact_round_trip": 7841,
+      "B_exact_after_nfc": 7841,
+      "B_ids_valid": true,
+      "B_reduction_percent": 0.383,
+      "B_samples_improved": 101,
+      "B_samples_worse": 0,
+      "B_samples_using_added_tokens": 101,
+      "B_added_token_share_percent": 0.137,
+      "C_tokens": 117615,
+      "C_tokens_per_sentence": 15.0,
+      "C_tokens_per_1000_chars": 298.305,
+      "C_exact_round_trip": 7841,
+      "C_exact_after_nfc": 7841,
+      "C_ids_valid": true,
+      "C_reduction_percent": 0.418,
+      "C_samples_improved": 95,
+      "C_samples_worse": 0,
+      "C_samples_using_added_tokens": 95,
+      "C_added_token_share_percent": 0.11
+    },
+    "mixed": {
+      "group": "mixed",
+      "samples": 2885,
+      "chars": 253717,
+      "A_tokens": 186461,
+      "A_tokens_per_sentence": 64.631,
+      "A_tokens_per_1000_chars": 734.917,
+      "A_exact_round_trip": 2885,
+      "A_exact_after_nfc": 2885,
+      "A_ids_valid": true,
+      "B_tokens": 133507,
+      "B_tokens_per_sentence": 46.276,
+      "B_tokens_per_1000_chars": 526.204,
+      "B_exact_round_trip": 2885,
+      "B_exact_after_nfc": 2885,
+      "B_ids_valid": true,
+      "B_reduction_percent": 28.4,
+      "B_samples_improved": 2461,
+      "B_samples_worse": 0,
+      "B_samples_using_added_tokens": 2464,
+      "B_added_token_share_percent": 12.853,
+      "C_tokens": 136813,
+      "C_tokens_per_sentence": 47.422,
+      "C_tokens_per_1000_chars": 539.235,
+      "C_exact_round_trip": 2885,
+      "C_exact_after_nfc": 2885,
+      "C_ids_valid": true,
+      "C_reduction_percent": 26.626,
+      "C_samples_improved": 1910,
+      "C_samples_worse": 0,
+      "C_samples_using_added_tokens": 1910,
+      "C_added_token_share_percent": 10.791
+    },
+    "other": {
+      "group": "other",
+      "samples": 1528,
+      "chars": 7310,
+      "A_tokens": 5395,
+      "A_tokens_per_sentence": 3.531,
+      "A_tokens_per_1000_chars": 738.03,
+      "A_exact_round_trip": 1528,
+      "A_exact_after_nfc": 1528,
+      "A_ids_valid": true,
+      "B_tokens": 5395,
+      "B_tokens_per_sentence": 3.531,
+      "B_tokens_per_1000_chars": 738.03,
+      "B_exact_round_trip": 1528,
+      "B_exact_after_nfc": 1528,
+      "B_ids_valid": true,
+      "B_reduction_percent": 0.0,
+      "B_samples_improved": 0,
+      "B_samples_worse": 0,
+      "B_samples_using_added_tokens": 0,
+      "B_added_token_share_percent": 0.0,
+      "C_tokens": 5395,
+      "C_tokens_per_sentence": 3.531,
+      "C_tokens_per_1000_chars": 738.03,
+      "C_exact_round_trip": 1528,
+      "C_exact_after_nfc": 1528,
+      "C_ids_valid": true,
+      "C_reduction_percent": 0.0,
+      "C_samples_improved": 0,
+      "C_samples_worse": 0,
+      "C_samples_using_added_tokens": 0,
+      "C_added_token_share_percent": 0.0
+    },
+    "kn": {
+      "group": "kn",
+      "samples": 40148,
+      "chars": 7339037,
+      "A_tokens": 10114344,
+      "A_tokens_per_sentence": 251.926,
+      "A_tokens_per_1000_chars": 1378.157,
+      "A_exact_round_trip": 40148,
+      "A_exact_after_nfc": 40148,
+      "A_ids_valid": true,
+      "B_tokens": 5466930,
+      "B_tokens_per_sentence": 136.169,
+      "B_tokens_per_1000_chars": 744.911,
+      "B_exact_round_trip": 40148,
+      "B_exact_after_nfc": 40148,
+      "B_ids_valid": true,
+      "B_reduction_percent": 45.949,
+      "B_samples_improved": 37570,
+      "B_samples_worse": 0,
+      "B_samples_using_added_tokens": 37570,
+      "B_added_token_share_percent": 17.702,
+      "C_tokens": 7325146,
+      "C_tokens_per_sentence": 182.454,
+      "C_tokens_per_1000_chars": 998.107,
+      "C_exact_round_trip": 40148,
+      "C_exact_after_nfc": 40148,
+      "C_ids_valid": true,
+      "C_reduction_percent": 27.577,
+      "C_samples_improved": 29716,
+      "C_samples_worse": 0,
+      "C_samples_using_added_tokens": 29716,
+      "C_added_token_share_percent": 5.542
+    }
+  },
+  "throughput_python_prototype": {
+    "A": {
+      "seconds": 42.3201,
+      "chars_per_second": 511805
+    },
+    "B": {
+      "seconds": 33.9561,
+      "chars_per_second": 637872
+    },
+    "C": {
+      "seconds": 34.1625,
+      "chars_per_second": 634018
+    }
+  },
+  "tokenizer": {
+    "file": "qwen3.json",
+    "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "base_size": 151669
+  },
+  "extensions": {
+    "B": {
+      "pool": "bytme",
+      "k": 2048,
+      "id_range": [
+        151669,
+        153716
+      ],
+      "corpus": [
+        {
+          "bytes": 711412337,
+          "file": "hiwiki-20261001-articles.jsonl",
+          "sha256": "1a0dec701c7ee2444902fe73f20431cfae419ce5c1f97d6ac6b47b000ad319c6"
+        },
+        {
+          "bytes": 462871769,
+          "file": "knwiki-20261001-articles.jsonl",
+          "sha256": "14becc475ea7bf95c6ab9fdb12c751f526009df1a6185841ae0349b9637350f8"
+        }
+      ]
+    },
+    "C": {
+      "pool": "words",
+      "k": 2048,
+      "id_range": [
+        151669,
+        153716
+      ],
+      "corpus": [
+        {
+          "bytes": 711412337,
+          "file": "hiwiki-20261001-articles.jsonl",
+          "sha256": "1a0dec701c7ee2444902fe73f20431cfae419ce5c1f97d6ac6b47b000ad319c6"
+        },
+        {
+          "bytes": 462871769,
+          "file": "knwiki-20261001-articles.jsonl",
+          "sha256": "14becc475ea7bf95c6ab9fdb12c751f526009df1a6185841ae0349b9637350f8"
+        }
+      ]
+    }
+  },
+  "proposed_target": {
+    "rule": ">= 20.0% fewer native tokens than A for hi and kn (proposed, not approved)",
+    "by_group": {
+      "hi": {
+        "B_reduction_percent": 36.778,
+        "met": true
+      },
+      "kn": {
+        "B_reduction_percent": 45.949,
+        "met": true
+      }
+    }
+  }
+}

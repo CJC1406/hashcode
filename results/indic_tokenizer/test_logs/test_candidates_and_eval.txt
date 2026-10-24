@@ -1,0 +1,31 @@
+........STOP (exit 13): spec not approved by the project owner (pending: ['gate_accepted_by_owner', 'evaluation_only_use_approved', 'storage_approved', 'aggregate_only_publication_approved'])
+STOP: /var/folders/kw/t8pr_6_n5m3fpvx0d4k6tvlh0000gn/T/hashcode_indic_tok_06m3buom/e1 exists; results are never overwritten
+STOP: B and C must add the same number of tokens
+STOP: candidate manifest was built for a different tokenizer file
+.STOP: --heldout-corpus files are not exactly the corpus files the candidates were selected from
+.STOP (exit 13): synthetic specs run only with --synthetic-test, and --synthetic-test runs only synthetic specs
+STOP: --training-corpus is for synthetic tests only
+...
+----------------------------------------------------------------------
+Ran 13 tests in 5.636s
+
+OK
+hi     A    1761  B    1693 (3.861%)  C     841 (52.243%)  exact A/B 5/5 of 5
+kn     A    2387  B    2244 (5.991%)  C    1462 (38.752%)  exact A/B 6/6 of 6
+mixed  A     359  B     311 (13.37%)  C     155 (56.825%)  exact A/B 1/1 of 1
+en     A      16  B      16 (0.0%)  C      16 (0.0%)  exact A/B 2/2 of 2
+edge   A      11  B      11 (0.0%)  C      11 (0.0%)  exact A/B 1/1 of 1
+label: FIXTURE (synthetic or hand-written): not evidence of real-world token reduction
+hi     A    1761  B    1693 (3.861%)  C     841 (52.243%)  exact A/B 5/5 of 5
+kn     A    2387  B    2244 (5.991%)  C    1462 (38.752%)  exact A/B 6/6 of 6
+mixed  A     359  B     311 (13.37%)  C     155 (56.825%)  exact A/B 1/1 of 1
+en     A      16  B      16 (0.0%)  C      16 (0.0%)  exact A/B 2/2 of 2
+edge   A      11  B      11 (0.0%)  C      11 (0.0%)  exact A/B 1/1 of 1
+label: FIXTURE (synthetic or hand-written): not evidence of real-world token reduction
+hi     A    1751  B    1683 (3.883%)  C     831 (52.541%)  exact A/B 15/15 of 15
+kn     A    2375  B    2232 (6.021%)  C    1450 (38.947%)  exact A/B 18/18 of 18
+mixed  A     357  B     309 (13.445%)  C     153 (57.143%)  exact A/B 3/3 of 3
+label: TRAINING-SOURCE HELD-OUT SPLIT (Wikipedia; documents excluded from candidate selection; same source, NOT independent evaluation)
+hi     A     667  B     639 (4.198%)  exact A/B 5/5 of 5
+kn     A     763  B     707 (7.339%)  exact A/B 6/6 of 6
+label: FIXTURE (synthetic or hand-written): not evidence of real-world token reduction

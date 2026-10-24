@@ -1,0 +1,216 @@
+{
+  "label": "FIXTURE (synthetic or hand-written): not evidence of real-world token reduction",
+  "source": {
+    "kind": "fixture",
+    "file": "demo_sentences.jsonl"
+  },
+  "samples": 6,
+  "groups": {
+    "hi": {
+      "group": "hi",
+      "samples": 2,
+      "chars": 112,
+      "A_tokens": 108,
+      "A_tokens_per_sentence": 54.0,
+      "A_tokens_per_1000_chars": 964.286,
+      "A_exact_round_trip": 2,
+      "A_exact_after_nfc": 2,
+      "A_ids_valid": true,
+      "B_tokens": 42,
+      "B_tokens_per_sentence": 21.0,
+      "B_tokens_per_1000_chars": 375.0,
+      "B_exact_round_trip": 2,
+      "B_exact_after_nfc": 2,
+      "B_ids_valid": true,
+      "B_reduction_percent": 61.111,
+      "B_samples_improved": 2,
+      "B_samples_worse": 0,
+      "B_samples_using_added_tokens": 2,
+      "B_added_token_share_percent": 45.238,
+      "C_tokens": 34,
+      "C_tokens_per_sentence": 17.0,
+      "C_tokens_per_1000_chars": 303.571,
+      "C_exact_round_trip": 2,
+      "C_exact_after_nfc": 2,
+      "C_ids_valid": true,
+      "C_reduction_percent": 68.519,
+      "C_samples_improved": 2,
+      "C_samples_worse": 0,
+      "C_samples_using_added_tokens": 2,
+      "C_added_token_share_percent": 67.647
+    },
+    "kn": {
+      "group": "kn",
+      "samples": 2,
+      "chars": 107,
+      "A_tokens": 153,
+      "A_tokens_per_sentence": 76.5,
+      "A_tokens_per_1000_chars": 1429.907,
+      "A_exact_round_trip": 2,
+      "A_exact_after_nfc": 2,
+      "A_ids_valid": true,
+      "B_tokens": 38,
+      "B_tokens_per_sentence": 19.0,
+      "B_tokens_per_1000_chars": 355.14,
+      "B_exact_round_trip": 2,
+      "B_exact_after_nfc": 2,
+      "B_ids_valid": true,
+      "B_reduction_percent": 75.163,
+      "B_samples_improved": 2,
+      "B_samples_worse": 0,
+      "B_samples_using_added_tokens": 2,
+      "B_added_token_share_percent": 52.632,
+      "C_tokens": 47,
+      "C_tokens_per_sentence": 23.5,
+      "C_tokens_per_1000_chars": 439.252,
+      "C_exact_round_trip": 2,
+      "C_exact_after_nfc": 2,
+      "C_ids_valid": true,
+      "C_reduction_percent": 69.281,
+      "C_samples_improved": 2,
+      "C_samples_worse": 0,
+      "C_samples_using_added_tokens": 2,
+      "C_added_token_share_percent": 25.532
+    },
+    "en": {
+      "group": "en",
+      "samples": 1,
+      "chars": 77,
+      "A_tokens": 17,
+      "A_tokens_per_sentence": 17.0,
+      "A_tokens_per_1000_chars": 220.779,
+      "A_exact_round_trip": 1,
+      "A_exact_after_nfc": 1,
+      "A_ids_valid": true,
+      "B_tokens": 17,
+      "B_tokens_per_sentence": 17.0,
+      "B_tokens_per_1000_chars": 220.779,
+      "B_exact_round_trip": 1,
+      "B_exact_after_nfc": 1,
+      "B_ids_valid": true,
+      "B_reduction_percent": 0.0,
+      "B_samples_improved": 0,
+      "B_samples_worse": 0,
+      "B_samples_using_added_tokens": 0,
+      "B_added_token_share_percent": 0.0,
+      "C_tokens": 17,
+      "C_tokens_per_sentence": 17.0,
+      "C_tokens_per_1000_chars": 220.779,
+      "C_exact_round_trip": 1,
+      "C_exact_after_nfc": 1,
+      "C_ids_valid": true,
+      "C_reduction_percent": 0.0,
+      "C_samples_improved": 0,
+      "C_samples_worse": 0,
+      "C_samples_using_added_tokens": 0,
+      "C_added_token_share_percent": 0.0
+    },
+    "mixed": {
+      "group": "mixed",
+      "samples": 1,
+      "chars": 64,
+      "A_tokens": 54,
+      "A_tokens_per_sentence": 54.0,
+      "A_tokens_per_1000_chars": 843.75,
+      "A_exact_round_trip": 1,
+      "A_exact_after_nfc": 1,
+      "A_ids_valid": true,
+      "B_tokens": 43,
+      "B_tokens_per_sentence": 43.0,
+      "B_tokens_per_1000_chars": 671.875,
+      "B_exact_round_trip": 1,
+      "B_exact_after_nfc": 1,
+      "B_ids_valid": true,
+      "B_reduction_percent": 20.37,
+      "B_samples_improved": 1,
+      "B_samples_worse": 0,
+      "B_samples_using_added_tokens": 1,
+      "B_added_token_share_percent": 6.977,
+      "C_tokens": 51,
+      "C_tokens_per_sentence": 51.0,
+      "C_tokens_per_1000_chars": 796.875,
+      "C_exact_round_trip": 1,
+      "C_exact_after_nfc": 1,
+      "C_ids_valid": true,
+      "C_reduction_percent": 5.556,
+      "C_samples_improved": 1,
+      "C_samples_worse": 0,
+      "C_samples_using_added_tokens": 1,
+      "C_added_token_share_percent": 3.922
+    }
+  },
+  "throughput_python_prototype": {
+    "A": {
+      "seconds": 0.0016,
+      "chars_per_second": 219167
+    },
+    "B": {
+      "seconds": 0.001,
+      "chars_per_second": 366226
+    },
+    "C": {
+      "seconds": 0.0011,
+      "chars_per_second": 318420
+    }
+  },
+  "tokenizer": {
+    "file": "qwen3.json",
+    "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "base_size": 151669
+  },
+  "extensions": {
+    "B": {
+      "pool": "bytme",
+      "k": 2048,
+      "id_range": [
+        151669,
+        153716
+      ],
+      "corpus": [
+        {
+          "bytes": 711412337,
+          "file": "hiwiki-20261001-articles.jsonl",
+          "sha256": "1a0dec701c7ee2444902fe73f20431cfae419ce5c1f97d6ac6b47b000ad319c6"
+        },
+        {
+          "bytes": 462871769,
+          "file": "knwiki-20261001-articles.jsonl",
+          "sha256": "14becc475ea7bf95c6ab9fdb12c751f526009df1a6185841ae0349b9637350f8"
+        }
+      ]
+    },
+    "C": {
+      "pool": "words",
+      "k": 2048,
+      "id_range": [
+        151669,
+        153716
+      ],
+      "corpus": [
+        {
+          "bytes": 711412337,
+          "file": "hiwiki-20261001-articles.jsonl",
+          "sha256": "1a0dec701c7ee2444902fe73f20431cfae419ce5c1f97d6ac6b47b000ad319c6"
+        },
+        {
+          "bytes": 462871769,
+          "file": "knwiki-20261001-articles.jsonl",
+          "sha256": "14becc475ea7bf95c6ab9fdb12c751f526009df1a6185841ae0349b9637350f8"
+        }
+      ]
+    }
+  },
+  "proposed_target": {
+    "rule": ">= 20.0% fewer native tokens than A for hi and kn (proposed, not approved)",
+    "by_group": {
+      "hi": {
+        "B_reduction_percent": 61.111,
+        "met": true
+      },
+      "kn": {
+        "B_reduction_percent": 75.163,
+        "met": true
+      }
+    }
+  }
+}

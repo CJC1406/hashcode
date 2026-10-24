@@ -1,0 +1,56 @@
+[
+ {
+  "group": "hi",
+  "id": "demo-hi-1",
+  "tokens": 62,
+  "added_tokens": 0,
+  "exact": true,
+  "exact_after_nfc": true,
+  "ids_valid": true
+ },
+ {
+  "group": "hi",
+  "id": "demo-hi-2",
+  "tokens": 46,
+  "added_tokens": 0,
+  "exact": true,
+  "exact_after_nfc": true,
+  "ids_valid": true
+ },
+ {
+  "group": "kn",
+  "id": "demo-kn-1",
+  "tokens": 77,
+  "added_tokens": 0,
+  "exact": true,
+  "exact_after_nfc": true,
+  "ids_valid": true
+ },
+ {
+  "group": "kn",
+  "id": "demo-kn-2",
+  "tokens": 76,
+  "added_tokens": 0,
+  "exact": true,
+  "exact_after_nfc": true,
+  "ids_valid": true
+ },
+ {
+  "group": "en",
+  "id": "demo-en-1",
+  "tokens": 17,
+  "added_tokens": 0,
+  "exact": true,
+  "exact_after_nfc": true,
+  "ids_valid": true
+ },
+ {
+  "group": "mixed",
+  "id": "demo-mixed-1",
+  "tokens": 54,
+  "added_tokens": 0,
+  "exact": true,
+  "exact_after_nfc": true,
+  "ids_valid": true
+ }
+]
