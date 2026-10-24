@@ -1,5 +1,7 @@
 # Phase 2, experiment 1: P2a (space+akshara entries)
 
+*Follow-up:* experiment 2, P2b (per-column ID width on this vocabulary), is in `docs/phase2_p2b_report.md`. Its measured total, 13,331 bytes, supersedes the estimate in §6 below. This report is otherwise unchanged.
+
 **Status:**
 - **Exploratory result on controlled data.**
   - H1 is supported: fallback is cut sharply, and P2a is 16–25% smaller than P1 for the Indic groups.

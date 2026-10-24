@@ -1,0 +1,21 @@
+{
+  "method": "exact byte match of JSON-encoded probes; whole sample and lines >= 32 bytes",
+  "training_files": [
+    "hiwiki-20261001-articles.jsonl",
+    "knwiki-20261001-articles.jsonl"
+  ],
+  "datasets": {
+    "phase1-kn-hi-v1": {
+      "samples": 65,
+      "probes_checked": 34,
+      "samples_found_whole": [],
+      "samples_with_a_line_found": []
+    },
+    "phase1-en-mixed-v1": {
+      "samples": 81,
+      "probes_checked": 49,
+      "samples_found_whole": [],
+      "samples_with_a_line_found": []
+    }
+  }
+}

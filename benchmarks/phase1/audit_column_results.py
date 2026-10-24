@@ -1,6 +1,7 @@
 """Independent audit of a column-mode run directory (no re-run of the benchmark).
 
-Usage: python3 -I benchmarks/phase1/audit_column_results.py results/phase1/<column run>
+Usage: python3 -I benchmarks/phase1/audit_column_results.py results/phase1/<column run> [--dataset-path EXTERNAL.jsonl]
+(--dataset-path is required for runs of an external evaluation dataset; its SHA-256 must equal the run's recorded one)
 Re-checks, from measurements_column.csv, containers.tsv, decoded_values.tsv and the frozen dataset:
 identical ordered inputs across methods, exact per-value reconstruction, byte accounting against the
 serialized container, ratio formulas, vocabulary disclosure, Dense token-ID width rule, timing fields,
@@ -15,6 +16,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SGTT = ["sgtt_openai200k_column", "sgtt_gemma3_column"]
 P1 = ["p1_akshara_column", "p2a_space_akshara_column"]  # fixed u16 token IDs
+P2B = ["p2b_column_id_width", "p2c_learned_column"]  # P2b codec: 1-byte local IDs (with mapping) or 2-byte global IDs
 
 
 def varint(buf, pos):
@@ -36,10 +38,21 @@ def seq_fnv(values):
     return h
 
 
-def main(run_dir: pathlib.Path):
+def main(run_dir: pathlib.Path, dataset_path=None):
     meta = json.loads((run_dir / "run_metadata.json").read_text())
+    if meta["dataset"].get("external"):
+        if dataset_path is None:
+            print("external-dataset run: pass --dataset-path")
+            return 2
+        import hashlib
+        if hashlib.sha256(pathlib.Path(dataset_path).read_bytes()).hexdigest() != meta["dataset"]["sha256"]:
+            print("--dataset-path does not match the run's recorded dataset SHA-256")
+            return 2
+        path = pathlib.Path(dataset_path)
+    else:
+        path = ROOT / meta["dataset"]["path"]
     dataset = {json.loads(l)["sample_id"]: bytes.fromhex(json.loads(l)["utf8_hex"])
-               for l in (ROOT / meta["dataset"]["path"]).read_text(encoding="utf-8").splitlines()}
+               for l in path.read_text(encoding="utf-8").splitlines()}
     rows = list(csv.DictReader(open(run_dir / "measurements_column.csv", encoding="utf-8")))
     containers = {(r["column_id"], r["method"]): bytes.fromhex(r["container_hex"]) for r in csv.DictReader(open(run_dir / "containers.tsv", encoding="utf-8"), delimiter="\t")}
     decoded = {}
@@ -88,7 +101,15 @@ def main(run_dir: pathlib.Path):
                     problems.append(f"{cid}/{m}: shared vocabulary not disclosed")
                 if r["token_count"]:
                     used, width = int(r["used_tokens"]), int(r["token_id_bytes"])
-                    want = 2 if m in P1 else 1 if used <= 256 else 2 if used <= 65536 else 4  # P1: fixed u16 IDs; sgtt Dense: by distinct count
+                    if m in P2B:
+                        # P2b chooses width 1 only if used <= 256 and it is smaller; the mapping must then be 1 + varint + 2 x used bytes.
+                        want = width if width in (1, 2) and not (width == 1 and used > 256) else -1
+                        if width == 1 and r["mapping_bytes"] and int(r["mapping_bytes"]) != 1 + (1 if used < 128 else 2) + 2 * used:
+                            problems.append(f"{cid}/{m}: mapping_bytes inconsistent with used_tokens")
+                        if r["mapping_bytes"] and int(r["mapping_bytes"]) != int(r["bitmap_bytes"]):
+                            problems.append(f"{cid}/{m}: mapping_bytes != bitmap_bytes slot")
+                    else:
+                        want = 2 if m in P1 else 1 if used <= 256 else 2 if used <= 65536 else 4  # P1/P2a: fixed u16; sgtt Dense: by distinct count
                     if width != want:
                         problems.append(f"{cid}/{m}: token_id_bytes {width} but used_tokens {used} implies {want}")
                     if int(r["encoded_payload_bytes"]) != int(r["token_count"]) * width:
@@ -126,4 +147,5 @@ def main(run_dir: pathlib.Path):
 
 
 if __name__ == "__main__":
-    sys.exit(main(pathlib.Path(sys.argv[1])))
+    extra = sys.argv[2:]
+    sys.exit(main(pathlib.Path(sys.argv[1]), extra[1] if extra[:1] == ["--dataset-path"] and len(extra) == 2 else None))

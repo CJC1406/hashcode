@@ -1,0 +1,6 @@
+get_filename_component(HASHCODE_PROJECT_DIR "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+add_executable(hashcode_p2b_tests "${HASHCODE_PROJECT_DIR}/tests/p2b/P2bCodecTest.cpp")
+target_include_directories(hashcode_p2b_tests PRIVATE "${HASHCODE_PROJECT_DIR}/codec/include" "${HASHCODE_PROJECT_DIR}/benchmarks/phase1")
+target_compile_definitions(hashcode_p2b_tests PRIVATE ${HASHCODE_P2A_DEFINITIONS})
+target_link_libraries(hashcode_p2b_tests PRIVATE sgtt_core Catch2::Catch2WithMain)
+set_target_properties(hashcode_p2b_tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/hashcode_tests")

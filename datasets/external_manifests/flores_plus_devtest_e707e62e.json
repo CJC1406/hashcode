@@ -1,0 +1,37 @@
+{
+  "_note": "Evaluation spec for benchmarks/phase2/evaluate_p2c.py. NOT APPROVED: every approval below is false, so the runner refuses this file. Only the project owner may set them. File metadata (paths, sizes, git blob SHA-1) comes from the PUBLIC Hugging Face file listing at the pinned revision, read 2026-10-25 without accepting the access gate. Field names inside the JSONL files and the record count have not been seen (the files are gated) and must be confirmed after access is granted.",
+  "name": "flores_plus",
+  "version_label": "4.6 (unconfirmed: the revision's version tag is behind the gate)",
+  "split": "devtest",
+  "source": {
+    "dataset_url": "https://huggingface.co/datasets/openlanguagedata/flores_plus",
+    "revision": "e707e62e762a9e2faca3933aa315f4665cc3cd8f",
+    "revision_last_modified": "2026-10-01T20:33:30.000Z",
+    "licence": "cc-by-sa-4.0 (card metadata)",
+    "download_url_template": "https://huggingface.co/datasets/openlanguagedata/flores_plus/resolve/{revision}/{path}",
+    "official_checksum": "git blob SHA-1 ('oid') and size from https://huggingface.co/api/datasets/openlanguagedata/flores_plus/tree/{revision}/devtest"
+  },
+  "approval": {
+    "gate_accepted_by_owner": false,
+    "evaluation_only_use_approved": false,
+    "storage_approved": false,
+    "aggregate_only_publication_approved": false,
+    "approved_by": null,
+    "approved_on": null
+  },
+  "decontamination": "pending",
+  "decontamination_options": "'report-only' (check FLORES+ sentences against the frozen training text and report overlap; the vocabulary stays frozen) or 'declined' (record as a limitation). The original plan's 'filter the training corpus before building' is no longer possible without rebuilding the frozen vocabulary.",
+  "storage_root": "/Users/Shared/hashcode-data/flores_plus/4.6",
+  "format": "jsonl",
+  "text_field": "text",
+  "id_field": "id",
+  "field_names_confirmed": false,
+  "expected_records_per_file": 1012,
+  "expected_records_confirmed": false,
+  "column_size": 64,
+  "files": [
+    {"group": "hi", "path": "devtest/hin_Deva.jsonl", "size": 644787, "git_blob_sha1": "8fe2f4435a5854f691279e1affd085ca4c3f0a37"},
+    {"group": "kn", "path": "devtest/kan_Knda.jsonl", "size": 683237, "git_blob_sha1": "17183ea16d4bcd5da43f3fc0bd910fa4aef40642"},
+    {"group": "en", "path": "devtest/eng_Latn.jsonl", "size": 439951, "git_blob_sha1": "0e94992350ebcf14fd775a762d36df5e5f9f6b71"}
+  ]
+}

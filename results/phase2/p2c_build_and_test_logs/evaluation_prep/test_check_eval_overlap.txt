@@ -1,0 +1,7 @@
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.017s
+
+OK
+{"phase1-kn-hi-v1": {"samples": 65, "sha256": "359269f4dbacd71e9442e3a1b38785e603698931fe4e8afa22e51b5ae36bb6fc", "probes_checked": 34, "samples_found_whole": 1, "samples_with_a_line_found": 0}, "phase1-en-mixed-v1": {"samples": 81, "sha256": "6c4685c24ac3603d19ba9121a3c564f88cd3f78542cbc8efec090f7c031d47b0", "probes_checked": 49, "samples_found_whole": 0, "samples_with_a_line_found": 0}}
+{"phase1-kn-hi-v1": {"samples": 65, "sha256": "359269f4dbacd71e9442e3a1b38785e603698931fe4e8afa22e51b5ae36bb6fc", "probes_checked": 34, "samples_found_whole": 0, "samples_with_a_line_found": 0}, "phase1-en-mixed-v1": {"samples": 81, "sha256": "6c4685c24ac3603d19ba9121a3c564f88cd3f78542cbc8efec090f7c031d47b0", "probes_checked": 49, "samples_found_whole": 0, "samples_with_a_line_found": 0}}

@@ -1,0 +1,148 @@
+{
+  "data_status": "CONTROLLED HARNESS DATA ONLY: small synthetic/curated datasets for harness validation, not reviewed by native speakers.\nThese results do NOT establish real-world compression effectiveness and cannot satisfy the Phase 2 criterion\n(>= 5% fewer bytes than the best sgtt baseline on approved, independent Hindi and Kannada evaluation data).",
+  "runs": {
+    "kn-hi-v1": [
+      "results/phase2/p2c-demo-kn-hi-column-full-1",
+      "results/phase2/p2c-demo-kn-hi-column-full-2"
+    ],
+    "en-mixed-v1": [
+      "results/phase2/p2c-demo-en-mixed-column-full-1",
+      "results/phase2/p2c-demo-en-mixed-column-full-2"
+    ]
+  },
+  "vocabulary": {
+    "sha256": "1e12dc488beddfdf0242268fd17cdd90e93d834be0a81e6780754bcbc629dc84",
+    "entries": 65536,
+    "file_bytes": 655073,
+    "L_selected": 32768,
+    "learned_entries": {
+      "hi": 16384,
+      "kn": 16384
+    }
+  },
+  "groups": [
+    {
+      "group": "hi",
+      "columns": 8,
+      "original": 10511,
+      "raw": 10619,
+      "sgtt": 2479,
+      "p2b": 3209,
+      "p2c": 1837,
+      "values": 32,
+      "exact_values": 32,
+      "sgtt_encode_ms": 0.645043,
+      "p2b_encode_ms": 0.218208,
+      "p2c_encode_ms": 0.100001,
+      "sgtt_decode_ms": 0.08779199999999998,
+      "p2b_decode_ms": 0.013959,
+      "p2c_decode_ms": 0.014414999999999999
+    },
+    {
+      "group": "kn",
+      "columns": 8,
+      "original": 13391,
+      "raw": 13502,
+      "sgtt": 2861,
+      "p2b": 3796,
+      "p2c": 2077,
+      "values": 33,
+      "exact_values": 33,
+      "sgtt_encode_ms": 0.622958,
+      "p2b_encode_ms": 0.282501,
+      "p2c_encode_ms": 0.10325000000000001,
+      "sgtt_decode_ms": 0.084833,
+      "p2b_decode_ms": 0.019251,
+      "p2c_decode_ms": 0.016958
+    },
+    {
+      "group": "en",
+      "columns": 8,
+      "original": 5665,
+      "raw": 5775,
+      "sgtt": 2656,
+      "p2b": 2091,
+      "p2c": 2161,
+      "values": 35,
+      "exact_values": 35,
+      "sgtt_encode_ms": 0.6695840000000001,
+      "p2b_encode_ms": 0.13083199999999998,
+      "p2c_encode_ms": 0.13845999999999997,
+      "sgtt_decode_ms": 0.100167,
+      "p2b_decode_ms": 0.009667,
+      "p2c_decode_ms": 0.01004
+    },
+    {
+      "group": "en-hi",
+      "columns": 8,
+      "original": 6584,
+      "raw": 6679,
+      "sgtt": 2129,
+      "p2b": 2040,
+      "p2c": 1494,
+      "values": 23,
+      "exact_values": 23,
+      "sgtt_encode_ms": 0.672125,
+      "p2b_encode_ms": 0.119541,
+      "p2c_encode_ms": 0.07145900000000001,
+      "sgtt_decode_ms": 0.09770999999999999,
+      "p2b_decode_ms": 0.009502,
+      "p2c_decode_ms": 0.008626
+    },
+    {
+      "group": "en-kn",
+      "columns": 8,
+      "original": 7188,
+      "raw": 7284,
+      "sgtt": 2175,
+      "p2b": 2195,
+      "p2c": 1492,
+      "values": 23,
+      "exact_values": 23,
+      "sgtt_encode_ms": 0.6387079999999999,
+      "p2b_encode_ms": 0.135041,
+      "p2c_encode_ms": 0.075166,
+      "sgtt_decode_ms": 0.09320899999999999,
+      "p2b_decode_ms": 0.009749,
+      "p2c_decode_ms": 0.010124
+    },
+    {
+      "group": "all 40",
+      "columns": 40,
+      "original": 43339,
+      "raw": 43859,
+      "sgtt": 12300,
+      "p2b": 13331,
+      "p2c": 9061,
+      "values": 146,
+      "exact_values": 146,
+      "sgtt_encode_ms": 3.2484179999999996,
+      "p2b_encode_ms": 0.886123,
+      "p2c_encode_ms": 0.48833599999999994,
+      "sgtt_decode_ms": 0.46371100000000004,
+      "p2b_decode_ms": 0.06212800000000002,
+      "p2c_decode_ms": 0.06016300000000001
+    }
+  ],
+  "reproducibility": {
+    "kn-hi-v1": {
+      "run_1": "results/phase2/p2c-demo-kn-hi-column-full-1",
+      "run_2": "results/phase2/p2c-demo-kn-hi-column-full-2",
+      "rows": 210,
+      "rows_with_differences": 0
+    },
+    "en-mixed-v1": {
+      "run_1": "results/phase2/p2c-demo-en-mixed-column-full-1",
+      "run_2": "results/phase2/p2c-demo-en-mixed-column-full-2",
+      "rows": 224,
+      "rows_with_differences": 0
+    }
+  },
+  "audits": {
+    "results/phase2/p2c-demo-kn-hi-column-full-1": "audited 210 rows, 30 columns: 0 problems",
+    "results/phase2/p2c-demo-kn-hi-column-full-2": "audited 210 rows, 30 columns: 0 problems",
+    "results/phase2/p2c-demo-en-mixed-column-full-1": "audited 224 rows, 32 columns: 0 problems",
+    "results/phase2/p2c-demo-en-mixed-column-full-2": "audited 224 rows, 32 columns: 0 problems"
+  },
+  "problems": []
+}

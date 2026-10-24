@@ -1,0 +1,115 @@
+{
+  "run_id": "p2c-default-kn-hi-column-smoke-1",
+  "mode": "column-smoke",
+  "repetitions": 3,
+  "command": [
+    "external/token-vldb2026/build-arm64/hashcode_benchmarks/phase1_column_harness",
+    "results/phase2/p2c-default-kn-hi-column-smoke-1/columns.tsv",
+    "results/phase2/p2c-default-kn-hi-column-smoke-1/raw_column_harness.csv",
+    "results/phase2/p2c-default-kn-hi-column-smoke-1/containers.tsv",
+    "results/phase2/p2c-default-kn-hi-column-smoke-1/decoded_values.tsv",
+    "3"
+  ],
+  "harness_exit_code": 0,
+  "dataset": {
+    "name": "kn-hi-v1",
+    "path": "datasets/phase1/kn_hi_v1.jsonl",
+    "sha256": "359269f4dbacd71e9442e3a1b38785e603698931fe4e8afa22e51b5ae36bb6fc",
+    "version": "phase1-kn-hi-v1",
+    "samples": 65
+  },
+  "columns": {
+    "col-smoke": [
+      "hi-short-001",
+      "hi-mixed-001",
+      "hi-edge-002",
+      "hi-tiny-001",
+      "kn-short-001",
+      "kn-medium-001",
+      "kn-edge-001",
+      "kn-tiny-001"
+    ],
+    "col-zero-values": [],
+    "col-empty-values": [
+      "hi-tiny-001",
+      "kn-tiny-001"
+    ]
+  },
+  "per_value_run": null,
+  "p2c_vocabulary": null,
+  "validation_problems": [],
+  "timestamp_utc": "2026-10-24T17:00:17+00:00",
+  "host": {
+    "os": "27.0.1",
+    "os_build": "26A434",
+    "machine": "arm64",
+    "cpu": "Apple M3",
+    "logical_cpus": "8"
+  },
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+  "cmake": "cmake version 4.4.4",
+  "python": "3.14.4",
+  "build_flags": {
+    "CMAKE_BUILD_TYPE:STRING": "Release",
+    "CMAKE_CXX_FLAGS:STRING": "-isystem /opt/homebrew/opt/boost/include",
+    "CMAKE_CXX_FLAGS_RELEASE:STRING": "-O3 -DNDEBUG",
+    "CMAKE_EXE_LINKER_FLAGS:STRING": "-L/opt/homebrew/opt/jemalloc/lib"
+  },
+  "upstream": {
+    "remote": "https://github.com/umbra-db/token-vldb2026.git",
+    "commit": "e202e36e2b33a4768d1122f96880b64416234175",
+    "branch": "fix/arm64-build",
+    "uncommitted_tracked_changes": [
+      "M src/CMakeLists.txt",
+      " M src/compressor/FsstCompressor.cpp",
+      " M src/compressor/HuffmanCompressor.cpp",
+      " M src/compressor/configs/FsstConfig.hpp",
+      " M src/compressor/fsst/decoder/LookupTableDecoder.cpp",
+      " M src/compressor/onpair_advanced/LongestPrefixMatcher.cpp",
+      " M src/tokenizer/Decoder.cpp",
+      " M src/util/Mmap.cpp"
+    ]
+  },
+  "harness_binary": "external/token-vldb2026/build-arm64/hashcode_benchmarks/phase1_column_harness",
+  "harness_sha256": "2cdde2808c7f27f9adc492eb03006c606814d783a071d6a8a553cba707522084",
+  "harness_source_sha256": "2fd8fe607baaa7f557c2748b315000ad6d0550df2aff6b40e1a06a76a044fc0b",
+  "shared_vocabulary_files": {
+    "openai200k": {
+      "src/tokens/openai200k/openai200k_dict.bin": {
+        "bytes": 3136160,
+        "sha256": "858273975254fa1ec2a91359844da3f967c8b7d9861e45e244df9195a540681a"
+      },
+      "src/tokens/openai200k/openai200k_lengths.bin": {
+        "bytes": 196010,
+        "sha256": "5c28d2d28b7311e905cbdb10b4e679d2521abb06fad14ae74407cee8ddd34162"
+      }
+    },
+    "gemma3": {
+      "src/tokens/gemma3/gemma3_dict.bin": {
+        "bytes": 4023552,
+        "sha256": "21df06d47a5fe044a415e59e86d08bbca60fa3942392892ec49acf9a24ad0677"
+      },
+      "src/tokens/gemma3/gemma3_lengths.bin": {
+        "bytes": 251472,
+        "sha256": "3f18d40ec9a2ee3a6163dc6417f5be378a1e457b4f3e183e5dd734342152b602"
+      }
+    },
+    "p1": {
+      "codec/p1/p1_vocabulary_v1.bin": {
+        "bytes": 445193,
+        "sha256": "8c85586c794d5589e7b640ebc0d2e9aa7a86e04ea28fe2dcf6ca4fb135ae2d43"
+      }
+    },
+    "p2a": {
+      "codec/p2a/p2a_vocabulary_v1.bin": {
+        "bytes": 445881,
+        "sha256": "c99ff52fa92fa7c8be541c0358c10acd678aeaa98764bb474ef06077faa7face"
+      }
+    }
+  },
+  "column_sources_sha256": {
+    "benchmarks/phase1/column_format.hpp": "8b317036c6b09ff2bc41433b8c27011aacfd7b1d658db77701585918e5482fb4",
+    "benchmarks/phase1/column_harness.cpp": "69559210ee8eb580a1c1c1588789a3c192c9726e1311ce722e5196c684fbf263",
+    "codec/include/p1_codec.hpp": "3e544b27d28cedd7ed0740c6e875fb7d0b6070c9a75ba67ba3d3809916d23938"
+  }
+}

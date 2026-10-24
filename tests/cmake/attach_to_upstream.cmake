@@ -14,3 +14,9 @@ cmake_language(DEFER DIRECTORY "${CMAKE_SOURCE_DIR}" CALL include "${HASHCODE_P1
 # P2a reuses HASHCODE_P1_DEFINITIONS, so it must come after the P1 targets.
 set(HASHCODE_P2A_TARGETS "${CMAKE_CURRENT_LIST_DIR}/p2a_targets.cmake")
 cmake_language(DEFER DIRECTORY "${CMAKE_SOURCE_DIR}" CALL include "${HASHCODE_P2A_TARGETS}")
+# P2b reuses HASHCODE_P2A_DEFINITIONS, so it must come after the P2a targets.
+set(HASHCODE_P2B_TARGETS "${CMAKE_CURRENT_LIST_DIR}/p2b_targets.cmake")
+cmake_language(DEFER DIRECTORY "${CMAKE_SOURCE_DIR}" CALL include "${HASHCODE_P2B_TARGETS}")
+# P2c also reuses HASHCODE_P2A_DEFINITIONS and the phase1_column_harness target.
+set(HASHCODE_P2C_TARGETS "${CMAKE_CURRENT_LIST_DIR}/p2c_targets.cmake")
+cmake_language(DEFER DIRECTORY "${CMAKE_SOURCE_DIR}" CALL include "${HASHCODE_P2C_TARGETS}")

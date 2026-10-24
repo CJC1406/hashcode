@@ -14,7 +14,11 @@ Hashcode 14.0, Track 04 (Data Compression). The project measures token-table com
 - **Phase 2:** the proposal awaits approval (`docs/phase2_proposal.md`). Experiment 1, **P2a** (`codec/p2a/`, space+akshara entries), was run on controlled data only.
   - It cut fallback sharply and is 16–25% smaller than P1 for the Indic groups.
   - It is still 55% larger than the best `sgtt` baseline by total bytes (`docs/phase2_p2a_report.md`).
+  - Experiment 2, **P2b** (per-column ID width), is 30.2% smaller than P2a, but still 8.4% larger than the best `sgtt` baseline (`docs/phase2_p2b_report.md`).
+  - Experiment 3, **P2c** (learned entries; `codec/p2c/`), has its builder and codec integration implemented and tested on a synthetic fixture only. No P2c vocabulary is frozen and nothing was benchmarked, because there is no approved training corpus (`docs/phase2_p2c_report.md`).
   - The real-data criterion is blocked on data approval (D3).
+
+- **Plan C (separate track):** a tokenizer-only prototype to reduce native LLM input tokens for Hindi and Kannada by extending Qwen3's tokenizer with ByteME-derived tokens (`docs/indic_tokenizer.md`). It has been measured on fixtures only, and no model has been trained or run.
 
 Both datasets (`datasets/phase1/`, `datasets/phase1_en_mixed/`) are small, synthetic, **for harness validation only**, and **not reviewed by native speakers**. Their results are not evidence of real-world compression performance.
 

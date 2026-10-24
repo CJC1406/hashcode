@@ -1,0 +1,221 @@
+2026-10-25T00:06:35 mode=real data_root=/Users/Shared/hashcode-data/wikipedia/20261001 date=20261001
+2026-10-25T00:06:35 verified hiwiki-20261001-pages-articles.xml.bz2: sha1 eb8929c38f0791f87a93c6d65919226b3068a0da matches the published value
+2026-10-25T00:06:36 verified knwiki-20261001-pages-articles.xml.bz2: sha1 66f6d094b04f750821ce00d5f4270023e1df0755 matches the published value
+2026-10-25T00:07:12 hiwiki-20261001-pages-articles.xml.bz2: bz2 stream complete, 1689650798 bytes uncompressed
+2026-10-25T00:07:29 knwiki-20261001-pages-articles.xml.bz2: bz2 stream complete, 777856566 bytes uncompressed
+2026-10-25T00:07:29 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/codec/p2c/convert_wikipedia.py --dump /Users/Shared/hashcode-data/wikipedia/20261001/raw/hiwiki-20261001-pages-articles.xml.bz2 --sha1sums /Users/Shared/hashcode-data/wikipedia/20261001/raw/hiwiki-20261001-sha1sums.txt --wiki hiwiki --out /Users/Shared/hashcode-data/wikipedia/20261001/train/hiwiki-20261001-articles.jsonl --stats /Users/Shared/hashcode-data/wikipedia/20261001/train/hiwiki-20261001-articles.stats.json
+2026-10-25T00:08:51   stdout: {"wiki": "hiwiki", "pages_seen": 328615, "articles_written": 174576, "output_sha256": "1a0dec701c7ee2444902fe73f20431cfae419ce5c1f97d6ac6b47b000ad319c6"}
+2026-10-25T00:08:52 hiwiki: 174576 articles -> hiwiki-20261001-articles.jsonl (711412337 bytes, sha256 1a0dec701c7ee2444902fe73f20431cfae419ce5c1f97d6ac6b47b000ad319c6)
+2026-10-25T00:08:52 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/codec/p2c/convert_wikipedia.py --dump /Users/Shared/hashcode-data/wikipedia/20261001/raw/knwiki-20261001-pages-articles.xml.bz2 --sha1sums /Users/Shared/hashcode-data/wikipedia/20261001/raw/knwiki-20261001-sha1sums.txt --wiki knwiki --out /Users/Shared/hashcode-data/wikipedia/20261001/train/knwiki-20261001-articles.jsonl --stats /Users/Shared/hashcode-data/wikipedia/20261001/train/knwiki-20261001-articles.stats.json
+2026-10-25T00:09:32   stdout: {"wiki": "knwiki", "pages_seen": 94396, "articles_written": 35929, "output_sha256": "14becc475ea7bf95c6ab9fdb12c751f526009df1a6185841ae0349b9637350f8"}
+2026-10-25T00:09:32 knwiki: 35929 articles -> knwiki-20261001-articles.jsonl (462871769 bytes, sha256 14becc475ea7bf95c6ab9fdb12c751f526009df1a6185841ae0349b9637350f8)
+2026-10-25T00:09:32 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/codec/p2c/check_eval_overlap.py --train /Users/Shared/hashcode-data/wikipedia/20261001/train/hiwiki-20261001-articles.jsonl --train /Users/Shared/hashcode-data/wikipedia/20261001/train/knwiki-20261001-articles.jsonl --out /Users/cjc/Downloads/hashcode/results/phase2/p2c-wikipedia-20261001-build/eval_overlap.json
+2026-10-25T00:10:15   stdout: {"phase1-kn-hi-v1": {"samples": 65, "probes_checked": 34, "samples_found_whole": 0, "samples_with_a_line_found": 0}, "phase1-en-mixed-v1": {"samples": 81, "probes_checked": 49, "samples_found_whole": 0, "samples_with_a_line_found": 0}}
+2026-10-25T00:10:15 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/codec/p2c/build_vocabulary.py --corpus-label Wikipedia hiwiki + knwiki dump 20261001 (CC BY-SA 4.0 / GFDL text; vocabulary released under CC BY-SA 4.0) --out-dir /Users/Shared/hashcode-data/wikipedia/20261001/build/20261025T001015/stage1 --name p2c_vocabulary_v1 --check-dir /Users/Shared/hashcode-data/wikipedia/20261001/build/20261025T001015/check1 --shards 16 --corpus /Users/Shared/hashcode-data/wikipedia/20261001/train/hiwiki-20261001-articles.jsonl --corpus /Users/Shared/hashcode-data/wikipedia/20261001/train/knwiki-20261001-articles.jsonl --freeze
+2026-10-25T00:15:02   stdout: {
+   "sha256": "1e12dc488beddfdf0242268fd17cdd90e93d834be0a81e6780754bcbc629dc84",
+   "L_selected": 32768,
+   "learned_entries": {
+    "hi": 16384,
+    "kn": 16384
+   },
+   "learned_slots_returned_to_ascii": 0,
+   "L_selection": [
+    {
+     "L": 4096,
+     "fillable": true,
+     "eligible": true,
+     "learned_filled": {
+      "hi": 2048,
+      "kn": 2048
+     },
+     "heldout_bytes": {
+      "hi": 10584384,
+      "kn": 5676672
+     },
+     "heldout_bytes_p2b": {
+      "hi": 15152132,
+      "kn": 8593244
+     },
+     "objective": "5530246180200/8137872962263",
+     "objective_float": 0.6795689986615538
+    },
+    {
+     "L": 8192,
+     "fillable": true,
+     "eligible": true,
+     "learned_filled": {
+      "hi": 4096,
+      "kn": 4096
+     },
+     "heldout_bytes": {
+      "hi": 9840800,
+      "kn": 5231077
+     },
+     "heldout_bytes_p2b": {
+      "hi": 15152132,
+      "kn": 8593244
+     },
+     "objective": "40956591190341/65102983698104",
+     "objective_float": 0.6291046717653553
+    },
+    {
+     "L": 16384,
+     "fillable": true,
+     "eligible": true,
+     "learned_filled": {
+      "hi": 8192,
+      "kn": 8192
+     },
+     "heldout_bytes": {
+      "hi": 9220059,
+      "kn": 4861923
+     },
+     "heldout_bytes_p2b": {
+      "hi": 15152132,
+      "kn": 8593244
+     },
+     "objective": "434371351566/739806632933",
+     "objective_float": 0.5871417370832609
+    },
+    {
+     "L": 32768,
+     "fillable": true,
+     "eligible": true,
+     "learned_filled": {
+      "hi": 16384,
+      "kn": 16384
+     },
+     "heldout_bytes": {
+      "hi": 8763602,
+      "kn": 4588013
+     },
+     "heldout_bytes_p2b": {
+      "hi": 15152132,
+      "kn": 8593244
+     },
+     "objective": "36206487224651/65102983698104",
+     "objective_float": 0.5561417490870767
+    }
+   ]
+  }
+2026-10-25T00:15:02 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/codec/p2c/build_vocabulary.py --corpus-label Wikipedia hiwiki + knwiki dump 20261001 (CC BY-SA 4.0 / GFDL text; vocabulary released under CC BY-SA 4.0) --out-dir /Users/Shared/hashcode-data/wikipedia/20261001/build/20261025T001015/stage2 --name p2c_vocabulary_v1 --check-dir /Users/Shared/hashcode-data/wikipedia/20261001/build/20261025T001015/check2 --shards 16 --corpus /Users/Shared/hashcode-data/wikipedia/20261001/train/hiwiki-20261001-articles.jsonl --corpus /Users/Shared/hashcode-data/wikipedia/20261001/train/knwiki-20261001-articles.jsonl --freeze
+2026-10-25T00:19:33   stdout: {
+   "sha256": "1e12dc488beddfdf0242268fd17cdd90e93d834be0a81e6780754bcbc629dc84",
+   "L_selected": 32768,
+   "learned_entries": {
+    "hi": 16384,
+    "kn": 16384
+   },
+   "learned_slots_returned_to_ascii": 0,
+   "L_selection": [
+    {
+     "L": 4096,
+     "fillable": true,
+     "eligible": true,
+     "learned_filled": {
+      "hi": 2048,
+      "kn": 2048
+     },
+     "heldout_bytes": {
+      "hi": 10584384,
+      "kn": 5676672
+     },
+     "heldout_bytes_p2b": {
+      "hi": 15152132,
+      "kn": 8593244
+     },
+     "objective": "5530246180200/8137872962263",
+     "objective_float": 0.6795689986615538
+    },
+    {
+     "L": 8192,
+     "fillable": true,
+     "eligible": true,
+     "learned_filled": {
+      "hi": 4096,
+      "kn": 4096
+     },
+     "heldout_bytes": {
+      "hi": 9840800,
+      "kn": 5231077
+     },
+     "heldout_bytes_p2b": {
+      "hi": 15152132,
+      "kn": 8593244
+     },
+     "objective": "40956591190341/65102983698104",
+     "objective_float": 0.6291046717653553
+    },
+    {
+     "L": 16384,
+     "fillable": true,
+     "eligible": true,
+     "learned_filled": {
+      "hi": 8192,
+      "kn": 8192
+     },
+     "heldout_bytes": {
+      "hi": 9220059,
+      "kn": 4861923
+     },
+     "heldout_bytes_p2b": {
+      "hi": 15152132,
+      "kn": 8593244
+     },
+     "objective": "434371351566/739806632933",
+     "objective_float": 0.5871417370832609
+    },
+    {
+     "L": 32768,
+     "fillable": true,
+     "eligible": true,
+     "learned_filled": {
+      "hi": 16384,
+      "kn": 16384
+     },
+     "heldout_bytes": {
+      "hi": 8763602,
+      "kn": 4588013
+     },
+     "heldout_bytes_p2b": {
+      "hi": 15152132,
+      "kn": 8593244
+     },
+     "objective": "36206487224651/65102983698104",
+     "objective_float": 0.5561417490870767
+    }
+   ]
+  }
+2026-10-25T00:19:34 builds identical: sha256 1e12dc488beddfdf0242268fd17cdd90e93d834be0a81e6780754bcbc629dc84, L = 32768, learned {'hi': 16384, 'kn': 16384}
+2026-10-25T00:19:37 frozen into codec/p2c
+2026-10-25T00:19:37 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/benchmarks/phase1/run_column_benchmark.py --dataset kn-hi-v1 --smoke --results-root /Users/Shared/hashcode-data/wikipedia/20261001/smoke --run-id p2c-wikipedia-kn-hi-v1-smoke-20261025T001937 --harness /Users/cjc/Downloads/hashcode/external/token-vldb2026/build-arm64/hashcode_benchmarks/phase1_column_harness --p2c-vocabulary /Users/cjc/Downloads/hashcode/codec/p2c/p2c_vocabulary_v1.bin
+2026-10-25T00:19:39   stdout: run p2c-wikipedia-kn-hi-v1-smoke-20261025T001937: 3 columns x 7 methods = 21 rows; harness exit 0
+  statuses: {'ok': 21}
+  validation problems: 0
+  output: /Users/Shared/hashcode-data/wikipedia/20261001/smoke/p2c-wikipedia-kn-hi-v1-smoke-20261025T001937
+2026-10-25T00:19:39 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/benchmarks/phase1/audit_column_results.py /Users/Shared/hashcode-data/wikipedia/20261001/smoke/p2c-wikipedia-kn-hi-v1-smoke-20261025T001937
+2026-10-25T00:19:39   stdout: audited 21 rows, 3 columns: 0 problems
+  columns where a codec method is not smaller than raw HCC1 (0):
+  sgtt per-column ratios (n=2): median 1.325, min 1.280, max 1.370
+  Dense token-ID width by column: 1 B: 2 rows
+  dataset values containing NUL: 0, LF: 0, CR: 0; NUL handling is covered by hashcode_column_tests, not by this run; LF handling is covered by hashcode_column_tests, not by this run
+2026-10-25T00:19:39 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/benchmarks/phase1/run_column_benchmark.py --dataset en-mixed-v1 --smoke --results-root /Users/Shared/hashcode-data/wikipedia/20261001/smoke --run-id p2c-wikipedia-en-mixed-v1-smoke-20261025T001937 --harness /Users/cjc/Downloads/hashcode/external/token-vldb2026/build-arm64/hashcode_benchmarks/phase1_column_harness --p2c-vocabulary /Users/cjc/Downloads/hashcode/codec/p2c/p2c_vocabulary_v1.bin
+2026-10-25T00:19:41   stdout: run p2c-wikipedia-en-mixed-v1-smoke-20261025T001937: 3 columns x 7 methods = 21 rows; harness exit 0
+  statuses: {'ok': 21}
+  validation problems: 0
+  output: /Users/Shared/hashcode-data/wikipedia/20261001/smoke/p2c-wikipedia-en-mixed-v1-smoke-20261025T001937
+2026-10-25T00:19:41 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/benchmarks/phase1/audit_column_results.py /Users/Shared/hashcode-data/wikipedia/20261001/smoke/p2c-wikipedia-en-mixed-v1-smoke-20261025T001937
+2026-10-25T00:19:41   stdout: audited 21 rows, 3 columns: 0 problems
+  columns where a codec method is not smaller than raw HCC1 (0):
+  sgtt per-column ratios (n=2): median 1.145, min 1.100, max 1.190
+  Dense token-ID width by column: 1 B: 2 rows
+  dataset values containing NUL: 0, LF: 4, CR: 1; NUL handling is covered by hashcode_column_tests, not by this run
+2026-10-25T00:19:41 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/tests/p2c/test_build_vocabulary.py
+2026-10-25T00:19:45 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/tests/p2c/test_convert_wikipedia.py
+2026-10-25T00:19:46 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/tests/p2c/test_check_vocabulary.py
+2026-10-25T00:19:47 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/tests/p2c/test_check_eval_overlap.py
+2026-10-25T00:19:47   stdout: {"phase1-kn-hi-v1": {"samples": 65, "probes_checked": 34, "samples_found_whole": 1, "samples_with_a_line_found": 0}, "phase1-en-mixed-v1": {"samples": 81, "probes_checked": 49, "samples_found_whole": 0, "samples_with_a_line_found": 0}}
+  {"phase1-kn-hi-v1": {"samples": 65, "probes_checked": 34, "samples_found_whole": 0, "samples_with_a_line_found": 0}, "phase1-en-mixed-v1": {"samples": 81, "probes_checked": 49, "samples_found_whole": 0, "samples_with_a_line_found": 0}}
+2026-10-25T00:19:47 $ /opt/homebrew/opt/python@3.14/bin/python3.14 -I /Users/cjc/Downloads/hashcode/tests/p2c/test_pipeline_dry_run.py
+2026-10-25T00:19:52 pipeline finished: OK. Stopped before evaluation (FLORES+ not approved).

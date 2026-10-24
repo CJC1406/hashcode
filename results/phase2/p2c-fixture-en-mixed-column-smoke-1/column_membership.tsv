@@ -1,0 +1,14 @@
+column_id	position	sample_id	language	category	utf8_bytes
+col-smoke	0	en-short-001	en	short	9
+col-smoke	1	en-structured-002	en	structured	49
+col-smoke	2	en-edge-002	en	edge	17
+col-smoke	3	en-tiny-001	en	tiny	0
+col-smoke	4	en-hi-medium-001	en-hi	medium	88
+col-smoke	5	en-hi-edge-002	en-hi	edge	38
+col-smoke	6	en-hi-tiny-001	en-hi	tiny	0
+col-smoke	7	en-kn-medium-001	en-kn	medium	86
+col-smoke	8	en-kn-structured-001	en-kn	structured	32
+col-smoke	9	en-kn-tiny-001	en-kn	tiny	0
+col-empty-values	0	en-tiny-001	en	tiny	0
+col-empty-values	1	en-hi-tiny-001	en-hi	tiny	0
+col-empty-values	2	en-kn-tiny-001	en-kn	tiny	0

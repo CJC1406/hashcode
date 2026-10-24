@@ -14,7 +14,7 @@ The implementation is `benchmarks/phase1/column_format.hpp`. It is used by `phas
 |---|---|---|
 | magic `HCC1` | 4 bytes | `header_bytes` |
 | version `0x01` | 1 byte | `header_bytes` |
-| codec: `0x00` raw, `0x01` sgtt, `0x02` P1 (`codec/p1/README.md`; blob = `uint16` IDs + 13-byte `BTT1` footer) | 1 byte | `header_bytes` |
+| codec: `0x00` raw, `0x01` sgtt, `0x02` P1/P2a (`codec/p1/README.md`; blob = `uint16` IDs + 13-byte `BTT1` footer), `0x03` P2b (`docs/phase2_p2b_report.md`; width byte, optional sorted `u16` mapping, `u8` or `u16` IDs, 13-byte `BTT2` footer) | 1 byte | `header_bytes` |
 | `value_count` | unsigned LEB128 varint | `boundary_metadata_bytes` |
 | one byte length per value, in order | `value_count` × varint | `boundary_metadata_bytes` |
 | `blob_length` | varint | `boundary_metadata_bytes` |

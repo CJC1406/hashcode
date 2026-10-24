@@ -1,0 +1,295 @@
+{
+  "pipeline": "p2c-wikipedia-pipeline-v1",
+  "mode": "real",
+  "synthetic": false,
+  "dump_date": "20261001",
+  "started": "2026-10-25T00:06:35",
+  "steps": {
+    "verify_checksums": {
+      "seconds": 0.54
+    },
+    "bz2_integrity": {
+      "seconds": 53.26
+    },
+    "convert_hiwiki": {
+      "seconds": 82.91,
+      "reused": false
+    },
+    "convert_knwiki": {
+      "seconds": 40.63,
+      "reused": false
+    },
+    "overlap_check": {
+      "seconds": 42.65
+    },
+    "build_1": {
+      "seconds": 287.06,
+      "max_rss_bytes_children": 1905737728
+    },
+    "build_2": {
+      "seconds": 271.3,
+      "max_rss_bytes_children": 1947844608
+    },
+    "checker": {
+      "seconds": null
+    },
+    "smoke_and_audit": {
+      "seconds": null
+    },
+    "unit_tests": {
+      "test_build_vocabulary.py": "ok",
+      "test_convert_wikipedia.py": "ok",
+      "test_check_vocabulary.py": "ok",
+      "test_check_eval_overlap.py": "ok",
+      "test_pipeline_dry_run.py": "ok"
+    }
+  },
+  "inputs": {
+    "hiwiki": {
+      "dump_url": "https://dumps.wikimedia.org/hiwiki/20261001/hiwiki-20261001-pages-articles.xml.bz2",
+      "sha1sums_url": "https://dumps.wikimedia.org/hiwiki/20261001/hiwiki-20261001-sha1sums.txt",
+      "dump_file": "hiwiki-20261001-pages-articles.xml.bz2",
+      "dump_bytes": 241701076,
+      "sha1_published": "eb8929c38f0791f87a93c6d65919226b3068a0da",
+      "sha1_verified": "eb8929c38f0791f87a93c6d65919226b3068a0da",
+      "sha256": "ec56cc94fdad94b6d342997b62f18fed56aa35215df2331a2fbf6ab0386d1952",
+      "sha1sums_sha256": "387f4d26f24f4e9b257a1e355794c54523acbca0bff7d1a08dcd0f1e4b124c90",
+      "uncompressed_bytes": 1689650798
+    },
+    "knwiki": {
+      "dump_url": "https://dumps.wikimedia.org/knwiki/20261001/knwiki-20261001-pages-articles.xml.bz2",
+      "sha1sums_url": "https://dumps.wikimedia.org/knwiki/20261001/knwiki-20261001-sha1sums.txt",
+      "dump_file": "knwiki-20261001-pages-articles.xml.bz2",
+      "dump_bytes": 115640184,
+      "sha1_published": "66f6d094b04f750821ce00d5f4270023e1df0755",
+      "sha1_verified": "66f6d094b04f750821ce00d5f4270023e1df0755",
+      "sha256": "52fcddd79939e367ddf311cab131a6d63e1a212124744e7c5b26207a0d3e660c",
+      "sha1sums_sha256": "caa7564919644e45012e7637a3bb92f9049847ce2e11f1bd85b7db468007b461",
+      "uncompressed_bytes": 777856566
+    }
+  },
+  "conversion": {
+    "hiwiki": {
+      "converter_version": "p2c-wikipedia-converter-v1",
+      "markup_rule": "wikitext-strip-v1",
+      "pages_seen": 328615,
+      "articles_written": 174576,
+      "skipped_namespace": 81813,
+      "skipped_redirect": 70976,
+      "skipped_missing_text": 0,
+      "skipped_empty_after_strip": 1250,
+      "output_file": "hiwiki-20261001-articles.jsonl",
+      "output_bytes": 711412337,
+      "output_sha256": "1a0dec701c7ee2444902fe73f20431cfae419ce5c1f97d6ac6b47b000ad319c6",
+      "reused_existing_output": false
+    },
+    "knwiki": {
+      "converter_version": "p2c-wikipedia-converter-v1",
+      "markup_rule": "wikitext-strip-v1",
+      "pages_seen": 94396,
+      "articles_written": 35929,
+      "skipped_namespace": 46809,
+      "skipped_redirect": 10617,
+      "skipped_missing_text": 0,
+      "skipped_empty_after_strip": 1041,
+      "output_file": "knwiki-20261001-articles.jsonl",
+      "output_bytes": 462871769,
+      "output_sha256": "14becc475ea7bf95c6ab9fdb12c751f526009df1a6185841ae0349b9637350f8",
+      "reused_existing_output": false
+    }
+  },
+  "status": "ok",
+  "eval_overlap": {
+    "phase1-kn-hi-v1": {
+      "samples": 65,
+      "probes_checked": 34,
+      "samples_found_whole": [],
+      "samples_with_a_line_found": []
+    },
+    "phase1-en-mixed-v1": {
+      "samples": 81,
+      "probes_checked": 49,
+      "samples_found_whole": [],
+      "samples_with_a_line_found": []
+    }
+  },
+  "build_dir": "/Users/Shared/hashcode-data/wikipedia/20261001/build/20261025T001015",
+  "vocabulary": {
+    "vocabulary": "p2c-learned",
+    "builder_version": "p2c-builder-v3",
+    "entries": 65536,
+    "file_bytes": 655073,
+    "sha256": "1e12dc488beddfdf0242268fd17cdd90e93d834be0a81e6780754bcbc629dc84",
+    "table_id_hex": "1e12dc488beddfdf",
+    "L_selected": 32768,
+    "L_selection": [
+      {
+        "L": 4096,
+        "fillable": true,
+        "eligible": true,
+        "learned_filled": {
+          "hi": 2048,
+          "kn": 2048
+        },
+        "heldout_bytes": {
+          "hi": 10584384,
+          "kn": 5676672
+        },
+        "heldout_bytes_p2b": {
+          "hi": 15152132,
+          "kn": 8593244
+        },
+        "objective": "5530246180200/8137872962263",
+        "objective_float": 0.6795689986615538
+      },
+      {
+        "L": 8192,
+        "fillable": true,
+        "eligible": true,
+        "learned_filled": {
+          "hi": 4096,
+          "kn": 4096
+        },
+        "heldout_bytes": {
+          "hi": 9840800,
+          "kn": 5231077
+        },
+        "heldout_bytes_p2b": {
+          "hi": 15152132,
+          "kn": 8593244
+        },
+        "objective": "40956591190341/65102983698104",
+        "objective_float": 0.6291046717653553
+      },
+      {
+        "L": 16384,
+        "fillable": true,
+        "eligible": true,
+        "learned_filled": {
+          "hi": 8192,
+          "kn": 8192
+        },
+        "heldout_bytes": {
+          "hi": 9220059,
+          "kn": 4861923
+        },
+        "heldout_bytes_p2b": {
+          "hi": 15152132,
+          "kn": 8593244
+        },
+        "objective": "434371351566/739806632933",
+        "objective_float": 0.5871417370832609
+      },
+      {
+        "L": 32768,
+        "fillable": true,
+        "eligible": true,
+        "learned_filled": {
+          "hi": 16384,
+          "kn": 16384
+        },
+        "heldout_bytes": {
+          "hi": 8763602,
+          "kn": 4588013
+        },
+        "heldout_bytes_p2b": {
+          "hi": 15152132,
+          "kn": 8593244
+        },
+        "objective": "36206487224651/65102983698104",
+        "objective_float": 0.5561417490870767
+      }
+    ],
+    "learned_entries": {
+      "hi": 16384,
+      "kn": 16384
+    },
+    "learned_slots_returned_to_ascii": 0,
+    "allow_unfilled": false,
+    "id_ranges": {
+      "p2a_core": [
+        0,
+        5247
+      ],
+      "learned_hi": [
+        5248,
+        21631
+      ],
+      "learned_kn": [
+        21632,
+        38015
+      ],
+      "ascii": [
+        38016,
+        65535
+      ]
+    },
+    "candidates_ranked": {
+      "hi": 16384,
+      "kn": 16384
+    },
+    "candidates_with_positive_score": {
+      "hi": 962339,
+      "kn": 738161
+    },
+    "distinct_training_runs": 2827437,
+    "shards": 16,
+    "corpus": {
+      "files": [
+        {
+          "file": "hiwiki-20261001-articles.jsonl",
+          "sha256": "1a0dec701c7ee2444902fe73f20431cfae419ce5c1f97d6ac6b47b000ad319c6",
+          "bytes": 711412337,
+          "documents": 174576
+        },
+        {
+          "file": "knwiki-20261001-articles.jsonl",
+          "sha256": "14becc475ea7bf95c6ab9fdb12c751f526009df1a6185841ae0349b9637350f8",
+          "bytes": 462871769,
+          "documents": 35929
+        }
+      ],
+      "sha256": null,
+      "bytes": 1174284106,
+      "documents": 210505,
+      "train_documents": 199919,
+      "heldout_documents": 10586,
+      "heldout_columns": {
+        "hi": 1747,
+        "kn": 669
+      },
+      "heldout_documents_without_language": 2
+    },
+    "builds_identical": true
+  },
+  "checker": {
+    "ok": true,
+    "entries": 65536,
+    "file_bytes": 655073,
+    "sha256": "1e12dc488beddfdf0242268fd17cdd90e93d834be0a81e6780754bcbc629dc84",
+    "learned_hi": 16384,
+    "learned_kn": 16384,
+    "ascii_entries": 27520,
+    "entry_round_trips": 65536,
+    "mixed_round_trips": 210,
+    "heldout_rows_checked": 2416
+  },
+  "frozen": {
+    "p2c_vocabulary_v1.bin": "codec/p2c/p2c_vocabulary_v1.bin",
+    "p2c_vocabulary_v1.sha256": "codec/p2c/p2c_vocabulary_v1.sha256",
+    "p2c_vocabulary_v1.manifest.json": "codec/p2c/p2c_vocabulary_v1.manifest.json"
+  },
+  "smoke": {
+    "kn-hi-v1": {
+      "run_id": "p2c-wikipedia-kn-hi-v1-smoke-20261025T001937",
+      "audit": "audited 21 rows, 3 columns: 0 problems",
+      "note": "round-trip validation on controlled data; not an evaluation"
+    },
+    "en-mixed-v1": {
+      "run_id": "p2c-wikipedia-en-mixed-v1-smoke-20261025T001937",
+      "audit": "audited 21 rows, 3 columns: 0 problems",
+      "note": "round-trip validation on controlled data; not an evaluation"
+    }
+  },
+  "finished": "2026-10-25T00:19:52"
+}

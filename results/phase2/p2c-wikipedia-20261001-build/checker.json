@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "file": "/Users/Shared/hashcode-data/wikipedia/20261001/build/20261025T001015/stage1/p2c_vocabulary_v1.bin",
+  "entries": 65536,
+  "file_bytes": 655073,
+  "sha256": "1e12dc488beddfdf0242268fd17cdd90e93d834be0a81e6780754bcbc629dc84",
+  "table_id_hex": "1e12dc488beddfdf",
+  "length_histogram": {"1": 256, "2": 1825, "3": 4686, "4": 5773, "5": 4825, "6": 6804, "7": 5427, "8": 1921, "9": 6100, "10": 2666, "11": 411, "12": 8423, "13": 3606, "14": 56, "15": 8764, "16": 3993},
+  "layout_checked": true,
+  "learned_hi": 16384,
+  "learned_kn": 16384,
+  "ascii_entries": 27520,
+  "entry_round_trips": 65536,
+  "mixed_round_trips": 210,
+  "heldout_rows_checked": 2416,
+  "failures": []
+}

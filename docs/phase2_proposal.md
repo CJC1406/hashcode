@@ -6,7 +6,20 @@
 - H1 is supported: fallback is cut sharply, and P2a is 16–25% smaller than P1 for the Indic groups.
 - P2a is still 55% larger than the best `sgtt` baseline by total bytes.
 - The §7 real-data criterion remains **blocked** on D3.
-- P2b–P2d are not implemented.
+- The criteria in §7 are unchanged.
+
+**Progress, experiment 2:** **P2b** is implemented and measured on the controlled data only (`docs/phase2_p2b_report.md`).
+- It is 30.2% smaller than P2a by total bytes.
+- It is still **8.4% larger than the best `sgtt` baseline**. It wins for `en` and `en-hi`, but loses by about 30% for `hi` and `kn`, where it needs 1.6–2.0× as many tokens as `sgtt` on long text.
+- P2c (learned multi-akshara and word entries) is the indicated next step, and is **blocked on an approved training corpus (D3)**. P2d is not implemented.
+
+**P2c planning (2026-10-24):** `docs/phase2_p2c_plan.md` contains the training-source licence review, the FLORES+ evaluation-only checklist, the frozen-before-evaluation design, and the owner decisions still required.
+- Nothing has been downloaded or trained.
+- **Owner decision recorded:** Kannada–English code-mixed evaluation is excluded from the initial P2c criterion and listed as future work. The §7 criterion otherwise applies unchanged, to Hindi and Kannada (and English as a regression check).
+
+**P2c implementation (controlled data only):** the builder, codec integration and tests are in `docs/phase2_p2c_report.md`.
+- They were tested with a synthetic fixture only.
+- No P2c vocabulary is frozen and no P2c comparison was run, because no training corpus is approved.
 - The criteria in §7 are unchanged.
 
 ## 1. What Phase 1 showed

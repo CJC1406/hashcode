@@ -1,0 +1,173 @@
+{
+  "vocabulary": "p2c-learned",
+  "builder_version": "p2c-builder-v3",
+  "entries": 65536,
+  "file_bytes": 655073,
+  "sha256": "1e12dc488beddfdf0242268fd17cdd90e93d834be0a81e6780754bcbc629dc84",
+  "table_id_hex": "1e12dc488beddfdf",
+  "max_token_bytes": 16,
+  "L_selected": 32768,
+  "L_selection": [
+    {
+      "L": 4096,
+      "fillable": true,
+      "eligible": true,
+      "learned_filled": {
+        "hi": 2048,
+        "kn": 2048
+      },
+      "heldout_bytes": {
+        "hi": 10584384,
+        "kn": 5676672
+      },
+      "heldout_bytes_p2b": {
+        "hi": 15152132,
+        "kn": 8593244
+      },
+      "objective": "5530246180200/8137872962263",
+      "objective_float": 0.6795689986615538
+    },
+    {
+      "L": 8192,
+      "fillable": true,
+      "eligible": true,
+      "learned_filled": {
+        "hi": 4096,
+        "kn": 4096
+      },
+      "heldout_bytes": {
+        "hi": 9840800,
+        "kn": 5231077
+      },
+      "heldout_bytes_p2b": {
+        "hi": 15152132,
+        "kn": 8593244
+      },
+      "objective": "40956591190341/65102983698104",
+      "objective_float": 0.6291046717653553
+    },
+    {
+      "L": 16384,
+      "fillable": true,
+      "eligible": true,
+      "learned_filled": {
+        "hi": 8192,
+        "kn": 8192
+      },
+      "heldout_bytes": {
+        "hi": 9220059,
+        "kn": 4861923
+      },
+      "heldout_bytes_p2b": {
+        "hi": 15152132,
+        "kn": 8593244
+      },
+      "objective": "434371351566/739806632933",
+      "objective_float": 0.5871417370832609
+    },
+    {
+      "L": 32768,
+      "fillable": true,
+      "eligible": true,
+      "learned_filled": {
+        "hi": 16384,
+        "kn": 16384
+      },
+      "heldout_bytes": {
+        "hi": 8763602,
+        "kn": 4588013
+      },
+      "heldout_bytes_p2b": {
+        "hi": 15152132,
+        "kn": 8593244
+      },
+      "objective": "36206487224651/65102983698104",
+      "objective_float": 0.5561417490870767
+    }
+  ],
+  "L_candidates": [
+    4096,
+    8192,
+    16384,
+    32768
+  ],
+  "learned_entries": {
+    "hi": 16384,
+    "kn": 16384
+  },
+  "learned_slots_returned_to_ascii": 0,
+  "allow_unfilled": false,
+  "id_ranges": {
+    "p2a_core": [
+      0,
+      5247
+    ],
+    "learned_hi": [
+      5248,
+      21631
+    ],
+    "learned_kn": [
+      21632,
+      38015
+    ],
+    "ascii": [
+      38016,
+      65535
+    ]
+  },
+  "candidates_ranked": {
+    "hi": 16384,
+    "kn": 16384
+  },
+  "candidates_with_positive_score": {
+    "hi": 962339,
+    "kn": 738161
+  },
+  "distinct_training_runs": 2827437,
+  "shards": 16,
+  "corpus": {
+    "label": "Wikipedia hiwiki + knwiki dump 20261001 (CC BY-SA 4.0 / GFDL text; vocabulary released under CC BY-SA 4.0)",
+    "files": [
+      {
+        "file": "hiwiki-20261001-articles.jsonl",
+        "sha256": "1a0dec701c7ee2444902fe73f20431cfae419ce5c1f97d6ac6b47b000ad319c6",
+        "bytes": 711412337,
+        "documents": 174576
+      },
+      {
+        "file": "knwiki-20261001-articles.jsonl",
+        "sha256": "14becc475ea7bf95c6ab9fdb12c751f526009df1a6185841ae0349b9637350f8",
+        "bytes": 462871769,
+        "documents": 35929
+      }
+    ],
+    "sha256": null,
+    "bytes": 1174284106,
+    "documents": 210505,
+    "train_documents": 199919,
+    "heldout_documents": 10586,
+    "heldout_columns": {
+      "hi": 1747,
+      "kn": 669
+    },
+    "heldout_documents_without_language": 2
+  },
+  "rules": {
+    "candidates": ">= 1 akshara(s) of one single-script run, <= 16 bytes, with/without leading space",
+    "score": "count x (p2a_tokens - 1), every occurrence counted, no re-scoring",
+    "ties": "longer first, then bytes ascending",
+    "split": "strict 50/50 hi/kn; an L is eligible only if both quotas fill",
+    "heldout": "sha256(doc_id) mod 20 == 0",
+    "heldout_column_lines": 64,
+    "heldout_language": "per document, the script with more code points",
+    "L_objective": "mean over hi, kn of heldout bytes / heldout bytes with P2a vocabulary (P2b)",
+    "L_tie_break": "smaller L"
+  },
+  "inputs": {
+    "p2a_vocabulary": {
+      "path": "codec/p2a/p2a_vocabulary_v1.bin",
+      "sha256": "c99ff52fa92fa7c8be541c0358c10acd678aeaa98764bb474ef06077faa7face"
+    }
+  },
+  "evaluation_data_read": false
+}

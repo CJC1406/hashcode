@@ -4,12 +4,14 @@ Usage (from the project root):
   python3 -I benchmarks/phase1/run_column_benchmark.py --smoke
   python3 -I benchmarks/phase1/run_column_benchmark.py --per-value-run results/phase1/<per-value run>
   python3 -I benchmarks/phase1/run_column_benchmark.py --compare RUN_A RUN_B
+  python3 -I benchmarks/phase1/run_column_benchmark.py --smoke --p2c-vocabulary <P2c-layout vocabulary .bin>   # adds p2c_learned_column
 Standard library only. Writes results/phase1/<run_id>/. Never overwrites an existing run directory.
 """
 import argparse
 import csv
 import datetime
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -20,10 +22,11 @@ import run_benchmark as pv  # noqa: E402  (shared dataset loading, provenance an
 
 COLUMN_HARNESS = pv.UPSTREAM / "build-arm64" / "hashcode_benchmarks" / "phase1_column_harness"
 METHOD_VOCAB = {"raw_utf8_column": None, "sgtt_openai200k_column": "openai200k", "sgtt_gemma3_column": "gemma3", "p1_akshara_column": "p1",
-                "p2a_space_akshara_column": "p2a"}
-METHOD_CODEC = {"raw_utf8_column": 0, "sgtt_openai200k_column": 1, "sgtt_gemma3_column": 1, "p1_akshara_column": 2, "p2a_space_akshara_column": 2}
+                "p2a_space_akshara_column": "p2a", "p2b_column_id_width": "p2a"}
+METHOD_CODEC = {"raw_utf8_column": 0, "sgtt_openai200k_column": 1, "sgtt_gemma3_column": 1, "p1_akshara_column": 2, "p2a_space_akshara_column": 2,
+                "p2b_column_id_width": 3}
 METHOD_FOOTER = {"sgtt_openai200k_column": pv.SGTT_FOOTER_BYTES, "sgtt_gemma3_column": pv.SGTT_FOOTER_BYTES, "p1_akshara_column": 13,
-                 "p2a_space_akshara_column": 13}
+                 "p2a_space_akshara_column": 13, "p2b_column_id_width": 13}
 P1_VOCABULARY = "codec/p1/p1_vocabulary_v1.bin"
 P2A_VOCABULARY = "codec/p2a/p2a_vocabulary_v1.bin"
 PER_VALUE_METHOD = {"raw_utf8_column": "raw_utf8", "sgtt_openai200k_column": "sgtt_openai200k_dense", "sgtt_gemma3_column": "sgtt_gemma3_dense"}
@@ -80,6 +83,25 @@ def build_columns_en_mixed(samples, smoke):
     return columns
 
 
+def build_columns_external(samples, smoke, column_size):
+    """Column policy for an approved external evaluation dataset: per language (in order of first appearance), the samples in
+    file order, in consecutive columns of `column_size` values: col-<language>-001, -002, ... All columns are non-overlapping.
+    Smoke: the first column of each language, cut to 8 values."""
+    langs = []
+    for s in samples:
+        if s["language"] not in langs:
+            langs.append(s["language"])
+    columns = []
+    for lang in langs:
+        ids = [s["sample_id"] for s in samples if s["language"] == lang]
+        chunks = [ids[i:i + column_size] for i in range(0, len(ids), column_size)]
+        if smoke:
+            chunks = chunks[:1]
+            chunks = [c[:8] for c in chunks]
+        columns += [(f"col-{lang}-{k + 1:03d}", c) for k, c in enumerate(chunks)]
+    return columns
+
+
 # Datasets selectable with --dataset; "kn-hi-v1" is the default and keeps the original behaviour.
 DATASETS = {
     "kn-hi-v1": {"path": pv.DATASET, "sha": pv.DATASET_SHA, "columns": build_columns, "per_value_comparison": True},
@@ -89,9 +111,9 @@ DATASETS = {
 }
 
 
-def load_dataset(path, sha_path):
+def load_dataset(path, sha_path, expected=None):
     """Same checks as run_benchmark.load_dataset, for any dataset file in the shared schema."""
-    expected = sha_path.read_text().split()[0]
+    expected = expected or sha_path.read_text().split()[0]
     actual = pv.sha256_file(path)
     if actual != expected:
         sys.exit(f"dataset checksum mismatch: {actual} != {expected} ({sha_path})")
@@ -248,14 +270,46 @@ def main():
     ap.add_argument("--compare", nargs=2, type=pathlib.Path, metavar=("RUN_A", "RUN_B"))
     ap.add_argument("--dataset", choices=sorted(DATASETS), default="kn-hi-v1")
     ap.add_argument("--results-root", type=pathlib.Path, default=pv.RESULTS, help="parent directory for the run (default results/phase1)")
+    ap.add_argument("--p2c-vocabulary", type=pathlib.Path, default=None,
+                    help="optional P2c-layout vocabulary; adds the p2c_learned_column method (P2b codec, HCC1 codec 3). Without it the method set is unchanged")
+    ap.add_argument("--external-dataset", type=pathlib.Path, default=None,
+                    help="approved evaluation dataset in the shared sample schema, stored OUTSIDE the repository (use with --external-sha256)")
+    ap.add_argument("--external-sha256", default=None)
+    ap.add_argument("--column-size", type=int, default=64, help="values per column for --external-dataset (default 64)")
     args = ap.parse_args()
     if args.compare:
         sys.exit(compare(*args.compare))
 
-    dataset = DATASETS[args.dataset]
+    external = args.external_dataset is not None
+    if external:
+        ext = args.external_dataset.resolve()
+        if not args.external_sha256:
+            sys.exit("--external-dataset needs --external-sha256")
+        for p, what in ((ext, "--external-dataset"), (args.results_root, "--results-root")):
+            try:
+                pathlib.Path(p).resolve().relative_to(pv.ROOT)
+                sys.exit(f"{what} must be outside the repository: run artifacts contain evaluation text")
+            except ValueError:
+                pass
+        if args.per_value_run:
+            sys.exit("--per-value-run is not defined for external datasets")
+        size = args.column_size
+        dataset = {"path": ext, "sha": None, "columns": lambda s, smoke: build_columns_external(s, smoke, size), "per_value_comparison": False}
+    else:
+        dataset = DATASETS[args.dataset]
+    env = {k: v for k, v in os.environ.items() if k != "HASHCODE_P2C_VOCABULARY"}
+    p2c = None
+    if args.p2c_vocabulary:
+        p2c = args.p2c_vocabulary.resolve()
+        if not p2c.is_file():
+            sys.exit(f"--p2c-vocabulary: {p2c} does not exist")
+        env["HASHCODE_P2C_VOCABULARY"] = str(p2c)
+        METHOD_VOCAB["p2c_learned_column"] = "p2c"
+        METHOD_CODEC["p2c_learned_column"] = 3
+        METHOD_FOOTER["p2c_learned_column"] = 13
     if args.per_value_run and not dataset["per_value_comparison"]:
         sys.exit(f"--per-value-run is only defined for datasets with per-value runs (not {args.dataset})")
-    samples, dataset_sha = load_dataset(dataset["path"], dataset["sha"])
+    samples, dataset_sha = load_dataset(dataset["path"], dataset["sha"], args.external_sha256 if external else None)
     by_id = {s["sample_id"]: s for s in samples}
     columns = dataset["columns"](samples, args.smoke)
     reps = args.repetitions or (3 if args.smoke else 7)
@@ -272,8 +326,14 @@ def main():
     prov["column_sources_sha256"] = {p: pv.sha256_file(pv.ROOT / p) for p in ("benchmarks/phase1/column_format.hpp", "benchmarks/phase1/column_harness.cpp", "codec/include/p1_codec.hpp")}
     for name, path in (("p1", P1_VOCABULARY), ("p2a", P2A_VOCABULARY)):
         prov["shared_vocabulary_files"][name] = {path: {"bytes": (pv.ROOT / path).stat().st_size, "sha256": pv.sha256_file(pv.ROOT / path)}}
+    p2c_info = None
+    if p2c:
+        manifest = p2c.with_suffix(".manifest.json")
+        label = json.loads(manifest.read_text())["corpus"]["label"] if manifest.is_file() else None
+        p2c_info = {"path_on_this_machine_basename": p2c.name, "bytes": p2c.stat().st_size, "sha256": pv.sha256_file(p2c), "corpus_label": label}
+        prov["shared_vocabulary_files"]["p2c"] = {p2c.name: {"bytes": p2c_info["bytes"], "sha256": p2c_info["sha256"]}}
     cmd = [str(args.harness), str(out / "columns.tsv"), str(out / "raw_column_harness.csv"), str(out / "containers.tsv"), str(out / "decoded_values.tsv"), str(reps)]
-    proc = subprocess.run(cmd, capture_output=True, text=True)
+    proc = subprocess.run(cmd, capture_output=True, text=True, env=env)
     (out / "harness_stdout.txt").write_text(proc.stdout)
     (out / "harness_stderr.txt").write_text(proc.stderr)
 
@@ -302,8 +362,11 @@ def main():
             return str(p)
     prov["harness_binary"] = rel(prov["harness_binary"])
     meta = {"run_id": run_id, "mode": "column-smoke" if args.smoke else "column-full", "repetitions": reps, "command": [rel(c) for c in cmd], "harness_exit_code": proc.returncode,
-            "dataset": {"name": args.dataset, "path": str(dataset["path"].relative_to(pv.ROOT)), "sha256": dataset_sha, "version": samples[0]["dataset_version"], "samples": len(samples)},
+            "dataset": ({"name": "external", "external": True, "path": dataset["path"].name, "column_size": args.column_size} if external else
+                        {"name": args.dataset, "path": str(dataset["path"].relative_to(pv.ROOT))})
+                       | {"sha256": dataset_sha, "version": samples[0]["dataset_version"], "samples": len(samples)},
             "columns": {cid: members for cid, members in columns}, "per_value_run": str(args.per_value_run) if args.per_value_run else None,
+            "p2c_vocabulary": p2c_info,
             "validation_problems": problems, **prov}
     (out / "run_metadata.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False) + "\n")
 

@@ -1,0 +1,26 @@
+{
+  "converter_version": "p2c-wikipedia-converter-v1",
+  "markup_rule": "wikitext-strip-v1",
+  "wiki": "knwiki",
+  "input_file": "knwiki-20261001-pages-articles.xml.bz2",
+  "pages_seen": 94396,
+  "articles_written": 35929,
+  "skipped_namespace": 46809,
+  "skipped_redirect": 10617,
+  "skipped_missing_text": 0,
+  "skipped_empty_after_strip": 1041,
+  "input_sha1_verified": "66f6d094b04f750821ce00d5f4270023e1df0755",
+  "input_sha256": "52fcddd79939e367ddf311cab131a6d63e1a212124744e7c5b26207a0d3e660c",
+  "drop_link_prefixes": [
+    "category",
+    "file",
+    "image",
+    "media",
+    "ಚಿತ್ರ",
+    "ಮೀಡಿಯ",
+    "ವರ್ಗ"
+  ],
+  "output_file": "knwiki-20261001-articles.jsonl",
+  "output_bytes": 462871769,
+  "output_sha256": "14becc475ea7bf95c6ab9fdb12c751f526009df1a6185841ae0349b9637350f8"
+}

@@ -1,0 +1,26 @@
+{
+  "converter_version": "p2c-wikipedia-converter-v1",
+  "markup_rule": "wikitext-strip-v1",
+  "wiki": "hiwiki",
+  "input_file": "hiwiki-20261001-pages-articles.xml.bz2",
+  "pages_seen": 328615,
+  "articles_written": 174576,
+  "skipped_namespace": 81813,
+  "skipped_redirect": 70976,
+  "skipped_missing_text": 0,
+  "skipped_empty_after_strip": 1250,
+  "input_sha1_verified": "eb8929c38f0791f87a93c6d65919226b3068a0da",
+  "input_sha256": "ec56cc94fdad94b6d342997b62f18fed56aa35215df2331a2fbf6ab0386d1952",
+  "drop_link_prefixes": [
+    "category",
+    "file",
+    "image",
+    "media",
+    "चित्र",
+    "मीडिया",
+    "श्रेणी"
+  ],
+  "output_file": "hiwiki-20261001-articles.jsonl",
+  "output_bytes": 711412337,
+  "output_sha256": "1a0dec701c7ee2444902fe73f20431cfae419ce5c1f97d6ac6b47b000ad319c6"
+}
