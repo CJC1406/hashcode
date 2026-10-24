@@ -1,0 +1,11 @@
+column_id	position	sample_id	language	category	utf8_bytes
+col-smoke	0	hi-short-001	hi	short	18
+col-smoke	1	hi-mixed-001	hi	mixed	100
+col-smoke	2	hi-edge-002	hi	edge	18
+col-smoke	3	hi-tiny-001	hi	tiny	0
+col-smoke	4	kn-short-001	kn	short	21
+col-smoke	5	kn-medium-001	kn	medium	152
+col-smoke	6	kn-edge-001	kn	edge	6
+col-smoke	7	kn-tiny-001	kn	tiny	0
+col-empty-values	0	hi-tiny-001	hi	tiny	0
+col-empty-values	1	kn-tiny-001	kn	tiny	0

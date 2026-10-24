@@ -1,0 +1,6 @@
+[  1%] Built target onpair
+[  1%] Built target roaring
+[ 73%] Built target sgtt_core
+[ 98%] Built target Catch2
+[100%] Built target Catch2WithMain
+[100%] Built target hashcode_roundtrip_tests

@@ -1,0 +1,7 @@
+get_filename_component(HASHCODE_BENCHMARKS_DIR "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
+add_executable(phase1_harness "${HASHCODE_BENCHMARKS_DIR}/phase1/harness.cpp")
+target_link_libraries(phase1_harness PRIVATE sgtt_core)
+set_target_properties(phase1_harness PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/hashcode_benchmarks")
+add_executable(phase1_column_harness "${HASHCODE_BENCHMARKS_DIR}/phase1/column_harness.cpp")
+target_link_libraries(phase1_column_harness PRIVATE sgtt_core)
+set_target_properties(phase1_column_harness PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/hashcode_benchmarks")

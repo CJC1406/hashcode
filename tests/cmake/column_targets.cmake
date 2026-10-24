@@ -1,0 +1,5 @@
+get_filename_component(HASHCODE_PROJECT_DIR "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+add_executable(hashcode_column_tests "${HASHCODE_PROJECT_DIR}/tests/column/ColumnFormatTest.cpp")
+target_include_directories(hashcode_column_tests PRIVATE "${HASHCODE_PROJECT_DIR}/benchmarks/phase1")
+target_link_libraries(hashcode_column_tests PRIVATE sgtt_core Catch2::Catch2WithMain)
+set_target_properties(hashcode_column_tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/hashcode_tests")

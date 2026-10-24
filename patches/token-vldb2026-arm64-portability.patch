@@ -1,0 +1,161 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 945ade9..1f062de 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -16,9 +16,11 @@ target_link_libraries(sgtt_core PUBLIC
+         jemalloc
+         onpair
+ )
+-target_compile_options(sgtt_core PRIVATE
+-    -mavx512f
+-    -mavx512bw
+-    -mavx512dq
+-    -mavx512vl
+-)
++if (CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|AMD64)$")
++    target_compile_options(sgtt_core PRIVATE
++        -mavx512f
++        -mavx512bw
++        -mavx512dq
++        -mavx512vl
++    )
++endif()
+diff --git a/src/compressor/FsstCompressor.cpp b/src/compressor/FsstCompressor.cpp
+index 6ba2aa7..da5b44d 100644
+--- a/src/compressor/FsstCompressor.cpp
++++ b/src/compressor/FsstCompressor.cpp
+@@ -4,6 +4,7 @@
+ #include "compressor/fsst/decoder/LookupTableDecoder.hpp"
+ #include "compressor/fsst/decoder/SimpleDecoder.hpp"
+ #include "util/CompilerHints.hpp"
++#include <algorithm>
+ #include <iomanip>
+ #include <iostream>
+ #include <numeric>
+diff --git a/src/compressor/HuffmanCompressor.cpp b/src/compressor/HuffmanCompressor.cpp
+index aa396ae..8486588 100644
+--- a/src/compressor/HuffmanCompressor.cpp
++++ b/src/compressor/HuffmanCompressor.cpp
+@@ -690,7 +690,7 @@ size_t HuffmanCompressor::decompressImpl(std::span<std::byte> input, std::vector
+       };
+ 
+       auto readBlock = [&](size_t block, Word* wordWriter) -> Word* {
+-         auto count = min(wordsPerBlock, wordCount);
++         auto count = min<size_t>(wordsPerBlock, wordCount);
+          wordCount -= count;
+          BitReader bitReader(reader + blockOffsets[block], huffTable, shiftTable, maxBits);
+ 
+diff --git a/src/compressor/configs/FsstConfig.hpp b/src/compressor/configs/FsstConfig.hpp
+index 6798a04..dcbcd57 100644
+--- a/src/compressor/configs/FsstConfig.hpp
++++ b/src/compressor/configs/FsstConfig.hpp
+@@ -2,6 +2,7 @@
+ //---------------------------------------------------------------------------
+ #include <cstdint>
+ #include <stdexcept>
++#include <string>
+ //---------------------------------------------------------------------------
+ // Static Global Token Table
+ // (c) 2026 Nicolas Schmitt
+diff --git a/src/compressor/fsst/decoder/LookupTableDecoder.cpp b/src/compressor/fsst/decoder/LookupTableDecoder.cpp
+index 09502e6..a79a110 100644
+--- a/src/compressor/fsst/decoder/LookupTableDecoder.cpp
++++ b/src/compressor/fsst/decoder/LookupTableDecoder.cpp
+@@ -1,5 +1,6 @@
+ #include "compressor/fsst/decoder/LookupTableDecoder.hpp"
+ #include "util/Perfetto.hpp"
++#include <bit>
+ #include <cstring>
+ #include <stdexcept>
+ //---------------------------------------------------------------------------
+diff --git a/src/compressor/onpair_advanced/LongestPrefixMatcher.cpp b/src/compressor/onpair_advanced/LongestPrefixMatcher.cpp
+index 9691b75..afc6493 100644
+--- a/src/compressor/onpair_advanced/LongestPrefixMatcher.cpp
++++ b/src/compressor/onpair_advanced/LongestPrefixMatcher.cpp
+@@ -1,4 +1,5 @@
+ #include "compressor/onpair_advanced/LongestPrefixMatcher.hpp"
++#include <algorithm>
+ //---------------------------------------------------------------------------
+ // Static Global Token Table
+ // (c) 2025 Nicolas Schmitt
+diff --git a/src/tokenizer/Decoder.cpp b/src/tokenizer/Decoder.cpp
+index b3363bc..d9b2058 100644
+--- a/src/tokenizer/Decoder.cpp
++++ b/src/tokenizer/Decoder.cpp
+@@ -7,8 +7,10 @@
+ #include <memory>
+ #include <span>
+ #include <vector>
++#if defined(__x86_64__)
+ #include <immintrin.h>
+ #include <smmintrin.h>
++#endif
+ //---------------------------------------------------------------------------
+ // Static Global Token Table
+ // (c) 2025 Tobias Schmidt
+@@ -18,7 +20,7 @@ using namespace std;
+ namespace sgtt::tokenizer {
+ //---------------------------------------------------------------------------
+ /// Host supports VBMI2
+-static bool hasVBMI2() {
++[[maybe_unused]] static bool hasVBMI2() {
+    #if defined(__x86_64__)
+       return __builtin_cpu_supports("avx512vbmi2");
+    #else
+@@ -58,9 +60,11 @@ class StandardDecoder final : public Decoder {
+    /// Decode the tokens
+    template <typename TokenId>
+    void decodeImpl(State& state, std::vector<std::byte>& output) const;
++#if defined(__x86_64__)
+    /// Decode the tokens using SIMD
+    template <typename TokenId>
+    void decodeSIMDImpl(State& state, std::vector<std::byte>& output) const;
++#endif
+ 
+    public:
+    /// Constructor
+@@ -101,6 +105,7 @@ void StandardDecoder<Token>::registerTokens(std::span<const uint8_t> lengths, st
+    denseTokenStoreMasks.resize(numTokens);
+ }
+ //---------------------------------------------------------------------------
++#if defined(__x86_64__)
+ template <typename Token>
+ template <typename TokenId>
+ __attribute__((target("avx512f,avx512bw,avx512vbmi2")))
+@@ -403,6 +408,7 @@ void StandardDecoder<Token>::decodeSIMDImpl(State& state, std::vector<std::byte>
+ 
+    output.resize(writer - output.data());
+ }
++#endif
+ //---------------------------------------------------------------------------
+ template <typename Token>
+ template <typename TokenId>
+@@ -533,9 +539,12 @@ void StandardDecoder<Token>::decode(State& state, std::vector<std::byte>& output
+ // Decode the tokens
+ {
+    auto fun = [this]<typename TokenId>(State& state, std::vector<std::byte>& output) {
++#if defined(__x86_64__)
+       if (avx512() && hasVBMI2()) {
+          decodeSIMDImpl<TokenId>(state, output);
+-      } else {
++      } else
++#endif
++      {
+          decodeImpl<TokenId>(state, output);
+       }
+    };
+diff --git a/src/util/Mmap.cpp b/src/util/Mmap.cpp
+index 83f8e78..ee9c9c5 100644
+--- a/src/util/Mmap.cpp
++++ b/src/util/Mmap.cpp
+@@ -41,8 +41,10 @@ Mmap Mmap::mapMemory(size_t size) {
+    result.size_ = size;
+ #ifdef NDEBUG
+    result.data_ = static_cast<char*>(mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0));
++#ifdef MADV_HUGEPAGE
+    if (size >= 2'000'000)
+       madvise(result.data_, size, MADV_HUGEPAGE);
++#endif
+ #else
+    result.data_ = static_cast<char*>(aligned_alloc(4096, size));
+ #endif
