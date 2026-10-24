@@ -1,0 +1,8 @@
+[  0%] Built target roaring
+[  0%] Built target onpair
+[ 25%] Built target Catch2
+[ 26%] Built target Catch2WithMain
+[100%] Built target sgtt_core
+[100%] Building CXX object CMakeFiles/hashcode_p1_tests.dir/Users/cjc/Downloads/hashcode/tests/p1/P1CodecTest.cpp.o
+[100%] Linking CXX executable hashcode_tests/hashcode_p1_tests
+[100%] Built target hashcode_p1_tests

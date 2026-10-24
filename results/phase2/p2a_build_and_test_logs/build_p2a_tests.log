@@ -1,0 +1,8 @@
+[  1%] Built target onpair
+[  2%] Built target roaring
+[ 75%] Built target sgtt_core
+[100%] Built target Catch2
+[100%] Built target Catch2WithMain
+[100%] Building CXX object CMakeFiles/hashcode_p2a_tests.dir/Users/cjc/Downloads/hashcode/tests/p2a/P2aCodecTest.cpp.o
+[100%] Linking CXX executable hashcode_tests/hashcode_p2a_tests
+[100%] Built target hashcode_p2a_tests

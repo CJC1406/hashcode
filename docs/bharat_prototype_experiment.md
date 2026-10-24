@@ -190,7 +190,20 @@ The terms are defined as follows:
 - **D4:** answered in practice: harnesses are in `benchmarks/phase1/`, and aggregation is Python in the same directory.
 
 ## 8. First implementation task
-Build the measurement harness for R0, R1 and R2 on the project-authored inputs, writing the CSV schema above:
+*Done:* the harness was built first. P1 was added only after the harness reproduced the reference sizes deterministically.
 - Correctness comes from `tests/`.
 - Sizes come from the actual encoded buffers, and times from `steady_clock`.
-- P1 is added once the harness reproduces the reference sizes deterministically.
+
+## 9. Phase 1 closing decisions and blockers (2026-10-24)
+| Topic | Status | Record |
+|---|---|---|
+| **D3: evaluation data** | **Open, and it blocks language-level claims.** FLORES+ is CC BY-SA 4.0, gated, evaluation-only and not to be redistributed publicly. IndicCorp v2 is labelled CC0 but its crawled text isn't addressed. No Kannada–English code-mixed corpus has been found. Nothing is downloaded, and storage and attribution aren't decided | §7 table; needs user approval |
+| **P1 tokenization** | **Implemented** (`codec/p1/`): greedy longest-prefix on bytes, 16 down to 2 bytes, fixed `uint16` IDs | `codec/p1/README.md` |
+| **P1 vocabulary** | **Frozen** before measurement (`p1-akshara-ascii-v1`, SHA-256 `8c85586c…`). Structural, built from Unicode 16.0.0 and `o200k.tiktoken`, with **no evaluation data** (checked by a test) | `codec/p1/README.md` |
+| **English/ASCII coverage (D1, D1a)** | 62,784 ASCII entries, all present in OpenAI200K and 49,887 in Gemma3, against 128,561 and 150,255 pure-ASCII entries in those vocabularies | `codec/p1/README.md` |
+| **Byte fallback** | IDs 0–255 = all single bytes. Exact reconstruction is tested on empty input, NUL, invalid UTF-8, all 256 byte values, and every prefix cut | `tests/p1/P1CodecTest.cpp` |
+| **Baseline reproducibility** | The three baselines in the P1 runs are identical to the frozen runs on all 21 non-timing columns | `results/phase1/p1-d2-evaluation/d2_summary.json` |
+| **Storage accounting** | Header + boundaries + IDs + bitmap + footer = container size for every row (the audit finds 0 problems). Vocabularies are reported separately | report §P |
+| **D2** | Pre-registered as at least a 5% median reduction against `baseline_c`. **Met in all 5 language groups,** but a byte-weighted view shows P1 88.8% larger in total. The median over 8 small synthetic columns rewards low fixed per-column cost | report §P |
+
+**Superseded by implementation:** the per-value `BTT1` header in §2.2 (HCC1 is used instead) and the six-script list in §2.1. See `codec/p1/README.md`, "How this relates to the design".

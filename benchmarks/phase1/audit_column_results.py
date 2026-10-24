@@ -14,7 +14,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SGTT = ["sgtt_openai200k_column", "sgtt_gemma3_column"]
-METHODS = ["raw_utf8_column"] + SGTT
+P1 = ["p1_akshara_column", "p2a_space_akshara_column"]  # fixed u16 token IDs
 
 
 def varint(buf, pos):
@@ -47,6 +47,8 @@ def main(run_dir: pathlib.Path):
         decoded.setdefault((r["column_id"], r["method"]), []).append(bytes.fromhex(r["decoded_hex"]))
     by = {(r["column_id"], r["method"]): r for r in rows}
     problems, notes = [], []
+    METHODS = sorted({r["method"] for r in rows}, key=lambda m: (m != "raw_utf8_column", m))
+    codecs = [m for m in METHODS if m != "raw_utf8_column"]
 
     for cid, members in meta["columns"].items():
         values = [dataset[s] for s in members]
@@ -86,7 +88,7 @@ def main(run_dir: pathlib.Path):
                     problems.append(f"{cid}/{m}: shared vocabulary not disclosed")
                 if r["token_count"]:
                     used, width = int(r["used_tokens"]), int(r["token_id_bytes"])
-                    want = 1 if used <= 256 else 2 if used <= 65536 else 4
+                    want = 2 if m in P1 else 1 if used <= 256 else 2 if used <= 65536 else 4  # P1: fixed u16 IDs; sgtt Dense: by distinct count
                     if width != want:
                         problems.append(f"{cid}/{m}: token_id_bytes {width} but used_tokens {used} implies {want}")
                     if int(r["encoded_payload_bytes"]) != int(r["token_count"]) * width:
@@ -97,10 +99,10 @@ def main(run_dir: pathlib.Path):
     expansions = []
     for cid in meta["columns"]:
         raw = int(by[(cid, "raw_utf8_column")]["total_stored_bytes"])
-        for m in SGTT:
+        for m in codecs:
             t = int(by[(cid, m)]["total_stored_bytes"])
             if int(by[(cid, m)]["original_payload_bytes"]) and t >= raw:
-                expansions.append(f"{cid}/{m}: sgtt {t} >= raw {raw}")
+                expansions.append(f"{cid}/{m}: {t} >= raw {raw}")
     ratios = [float(r["compression_ratio"]) for r in rows if r["method"] in SGTT and r["compression_ratio"]]
     widths = {}
     for r in rows:
@@ -109,7 +111,7 @@ def main(run_dir: pathlib.Path):
     print(f"audited {len(rows)} rows, {len(meta['columns'])} columns: {len(problems)} problems")
     for p in problems:
         print("  PROBLEM " + p)
-    print(f"columns where an sgtt method is not smaller than raw HCC1 ({len(expansions)}):")
+    print(f"columns where a codec method is not smaller than raw HCC1 ({len(expansions)}):")
     for e in expansions:
         print("  " + e)
     print(f"sgtt per-column ratios (n={len(ratios)}): median {statistics.median(ratios):.3f}, min {min(ratios):.3f}, max {max(ratios):.3f}")

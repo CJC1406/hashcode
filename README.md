@@ -8,7 +8,13 @@ Hashcode 14.0, Track 04 (Data Compression). The project measures token-table com
   - `docs/phase1_benchmark_report.md`
   - `docs/phase1_column_protocol.md`
   - `docs/bharat_prototype_experiment.md`
-- **P1** (the Bharat-specific akshara token table) is not implemented yet.
+- **P1** (the Bharat-specific akshara token table, `codec/p1/`) is implemented and evaluated.
+  - **Phase 1 passed its pre-registered gate on controlled data.**
+  - But byte-weighted, P1 stores 88.8% more than the best `sgtt` baseline. Its wins come from lower fixed per-column cost (see `docs/phase1_benchmark_report.md` §P).
+- **Phase 2:** the proposal awaits approval (`docs/phase2_proposal.md`). Experiment 1, **P2a** (`codec/p2a/`, space+akshara entries), was run on controlled data only.
+  - It cut fallback sharply and is 16–25% smaller than P1 for the Indic groups.
+  - It is still 55% larger than the best `sgtt` baseline by total bytes (`docs/phase2_p2a_report.md`).
+  - The real-data criterion is blocked on data approval (D3).
 
 Both datasets (`datasets/phase1/`, `datasets/phase1_en_mixed/`) are small, synthetic, **for harness validation only**, and **not reviewed by native speakers**. Their results are not evidence of real-world compression performance.
 
@@ -31,9 +37,11 @@ cmake -S . -B build-arm64 -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_CXX_FLAGS="-isystem $(brew --prefix boost)/include" \
   -DCMAKE_EXE_LINKER_FLAGS="-L$(brew --prefix jemalloc)/lib" \
   "-DCMAKE_PROJECT_static-global-token-table_INCLUDE=$PWD/../../tests/cmake/attach_to_upstream.cmake"
-cmake --build build-arm64 --target hashcode_column_tests phase1_harness phase1_column_harness hashcode_roundtrip_tests
+cmake --build build-arm64 --target hashcode_column_tests hashcode_p1_tests phase1_harness phase1_column_harness hashcode_roundtrip_tests
 cd ../..
+python3 -I codec/p1/build_vocabulary.py       # optional: rebuilds the frozen P1 vocabulary (same SHA-256)
 external/token-vldb2026/build-arm64/hashcode_tests/hashcode_column_tests
+external/token-vldb2026/build-arm64/hashcode_tests/hashcode_p1_tests
 python3 -I benchmarks/phase1/run_column_benchmark.py --smoke
 python3 -I benchmarks/phase1/run_column_benchmark.py --dataset en-mixed-v1 --smoke
 ```
@@ -41,9 +49,10 @@ python3 -I benchmarks/phase1/run_column_benchmark.py --dataset en-mixed-v1 --smo
 ## Layout
 | Path | Contents |
 |---|---|
-| `benchmarks/phase1/` | C++ harnesses, the HCC1 column format, Python runners and the result audit |
+| `benchmarks/phase1/` | C++ harnesses, the HCC1 column format, Python runners, the result audit and the D2 evaluation |
+| `codec/` | the P1 codec (`include/p1_codec.hpp`) and its frozen vocabulary and builder (`p1/`) |
 | `tests/` | project-owned Catch2 tests, attached to the upstream build through a CMake hook |
 | `datasets/` | frozen Phase 1 datasets with builders, checksums and READMEs |
-| `results/phase1/` | recorded benchmark runs. Run metadata contains local absolute paths from the original machine |
+| `results/phase1/`, `results/phase2/` | recorded benchmark runs. Paths in `run_metadata.json` are relative to the repository root, **except** in the six `results/phase1/p1-*-column-*` runs, which record absolute paths from the original machine and are kept unmodified as recorded. Absolute paths also remain in the build and test logs (`*_logs/` directories) and in some commands in `docs/` |
 | `patches/` | the build/portability patch for the upstream checkout |
 | `docs/` | findings, protocols, reports and the P1 design |

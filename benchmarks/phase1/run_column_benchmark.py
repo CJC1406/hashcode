@@ -19,7 +19,13 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import run_benchmark as pv  # noqa: E402  (shared dataset loading, provenance and CSV helpers)
 
 COLUMN_HARNESS = pv.UPSTREAM / "build-arm64" / "hashcode_benchmarks" / "phase1_column_harness"
-METHOD_VOCAB = {"raw_utf8_column": None, "sgtt_openai200k_column": "openai200k", "sgtt_gemma3_column": "gemma3"}
+METHOD_VOCAB = {"raw_utf8_column": None, "sgtt_openai200k_column": "openai200k", "sgtt_gemma3_column": "gemma3", "p1_akshara_column": "p1",
+                "p2a_space_akshara_column": "p2a"}
+METHOD_CODEC = {"raw_utf8_column": 0, "sgtt_openai200k_column": 1, "sgtt_gemma3_column": 1, "p1_akshara_column": 2, "p2a_space_akshara_column": 2}
+METHOD_FOOTER = {"sgtt_openai200k_column": pv.SGTT_FOOTER_BYTES, "sgtt_gemma3_column": pv.SGTT_FOOTER_BYTES, "p1_akshara_column": 13,
+                 "p2a_space_akshara_column": 13}
+P1_VOCABULARY = "codec/p1/p1_vocabulary_v1.bin"
+P2A_VOCABULARY = "codec/p2a/p2a_vocabulary_v1.bin"
 PER_VALUE_METHOD = {"raw_utf8_column": "raw_utf8", "sgtt_openai200k_column": "sgtt_openai200k_dense", "sgtt_gemma3_column": "sgtt_gemma3_dense"}
 DETERMINISTIC = ["column_id", "method", "value_count", "original_payload_bytes", "input_sequence_fnv1a64", "token_count", "token_id_bytes", "used_tokens",
                  "header_bytes", "boundary_metadata_bytes", "codec_blob_bytes", "encoded_payload_bytes", "bitmap_bytes", "footer_bytes", "total_stored_bytes",
@@ -173,14 +179,14 @@ def validate(columns, by_id, rows, containers, decoded, prov):
                     problems.append(f"{tag}: independently parsed layout differs from reported layout")
                 if m == "raw_utf8_column" and p["blob"] != b"".join(values):
                     problems.append(f"{tag}: raw blob is not the concatenated values")
-                if p["codec"] != (0 if m == "raw_utf8_column" else 1):
+                if p["codec"] != METHOD_CODEC[m]:
                     problems.append(f"{tag}: codec byte")
             except Exception as e:  # noqa: BLE001
                 problems.append(f"{tag}: Python HCC1 parse failed: {e}")
             if m == "raw_utf8_column" and (int(r["bitmap_bytes"]) or int(r["footer_bytes"]) or int(r["encoded_payload_bytes"]) != sum(map(len, values))):
                 problems.append(f"{tag}: raw accounting")
-            if m != "raw_utf8_column" and sum(map(len, values)) > 0 and int(r["footer_bytes"]) != pv.SGTT_FOOTER_BYTES:
-                problems.append(f"{tag}: sgtt footer")
+            if m != "raw_utf8_column" and sum(map(len, values)) > 0 and int(r["footer_bytes"]) != METHOD_FOOTER[m]:
+                problems.append(f"{tag}: codec footer size")
             got = decoded.get((cid, m), [])
             if [g[1] for g in got] != members or [bytes.fromhex(g[2]) for g in got] != values:
                 problems.append(f"{tag}: independent per-value decoded check failed")
@@ -204,6 +210,8 @@ def per_value_comparison(columns, derived, per_value_dir):
         pvrows = {(r["sample_id"], r["method"]): r for r in csv.DictReader(f)}
     out = []
     for r in derived:
+        if r["method"] not in PER_VALUE_METHOD:
+            continue  # no per-value counterpart (P1 exists only in column mode)
         members = r["member_sample_ids"].split() if r["member_sample_ids"] else []
         pm = PER_VALUE_METHOD[r["method"]]
         supported = [sid for sid in members if pvrows[(sid, pm)]["status"] == "ok"]
@@ -239,6 +247,7 @@ def main():
     ap.add_argument("--per-value-run", type=pathlib.Path, default=None, help="per-value run directory for the per-value vs column comparison")
     ap.add_argument("--compare", nargs=2, type=pathlib.Path, metavar=("RUN_A", "RUN_B"))
     ap.add_argument("--dataset", choices=sorted(DATASETS), default="kn-hi-v1")
+    ap.add_argument("--results-root", type=pathlib.Path, default=pv.RESULTS, help="parent directory for the run (default results/phase1)")
     args = ap.parse_args()
     if args.compare:
         sys.exit(compare(*args.compare))
@@ -251,7 +260,7 @@ def main():
     columns = dataset["columns"](samples, args.smoke)
     reps = args.repetitions or (3 if args.smoke else 7)
     run_id = args.run_id or (("column-smoke-" if args.smoke else "column-full-") + datetime.datetime.now().strftime("%Y%m%dT%H%M%S"))
-    out = pv.RESULTS / run_id
+    out = args.results_root.resolve() / run_id
     out.mkdir(parents=True, exist_ok=False)
 
     with open(out / "columns.tsv", "w", encoding="ascii") as f:
@@ -260,7 +269,9 @@ def main():
             for sid in members:
                 f.write(f"V\t{sid}\t{by_id[sid]['utf8_hex']}\n")
     prov = pv.provenance(args.harness)
-    prov["column_sources_sha256"] = {p: pv.sha256_file(pv.ROOT / p) for p in ("benchmarks/phase1/column_format.hpp", "benchmarks/phase1/column_harness.cpp")}
+    prov["column_sources_sha256"] = {p: pv.sha256_file(pv.ROOT / p) for p in ("benchmarks/phase1/column_format.hpp", "benchmarks/phase1/column_harness.cpp", "codec/include/p1_codec.hpp")}
+    for name, path in (("p1", P1_VOCABULARY), ("p2a", P2A_VOCABULARY)):
+        prov["shared_vocabulary_files"][name] = {path: {"bytes": (pv.ROOT / path).stat().st_size, "sha256": pv.sha256_file(pv.ROOT / path)}}
     cmd = [str(args.harness), str(out / "columns.tsv"), str(out / "raw_column_harness.csv"), str(out / "containers.tsv"), str(out / "decoded_values.tsv"), str(reps)]
     proc = subprocess.run(cmd, capture_output=True, text=True)
     (out / "harness_stdout.txt").write_text(proc.stdout)
@@ -283,7 +294,14 @@ def main():
                 f.write(f"{cid}\t{i}\t{sid}\t{by_id[sid]['language']}\t{by_id[sid]['category']}\t{by_id[sid]['utf8_bytes']}\n")
     if args.per_value_run:
         pv.write_csv(out / "per_value_vs_column.csv", per_value_comparison(columns, derived, args.per_value_run))
-    meta = {"run_id": run_id, "mode": "column-smoke" if args.smoke else "column-full", "repetitions": reps, "command": cmd, "harness_exit_code": proc.returncode,
+    def rel(p):
+        """Repository-relative form of a path argument, so run metadata contains no machine-specific paths."""
+        try:
+            return str(pathlib.Path(p).resolve().relative_to(pv.ROOT))
+        except ValueError:
+            return str(p)
+    prov["harness_binary"] = rel(prov["harness_binary"])
+    meta = {"run_id": run_id, "mode": "column-smoke" if args.smoke else "column-full", "repetitions": reps, "command": [rel(c) for c in cmd], "harness_exit_code": proc.returncode,
             "dataset": {"name": args.dataset, "path": str(dataset["path"].relative_to(pv.ROOT)), "sha256": dataset_sha, "version": samples[0]["dataset_version"], "samples": len(samples)},
             "columns": {cid: members for cid, members in columns}, "per_value_run": str(args.per_value_run) if args.per_value_run else None,
             "validation_problems": problems, **prov}

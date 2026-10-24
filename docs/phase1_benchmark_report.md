@@ -5,11 +5,124 @@
   - **Column mode** (§C) is the primary comparison.
   - **Per-value mode** (§1–6) is kept as a diagnostic.
 - The P1 entry criteria are met (§7). The dataset is accepted **for harness validation only**, and native-speaker review hasn't been confirmed. D1 and D2 are recorded.
-- No P1 code exists.
+- **P1 is implemented and evaluated (§P). Phase 1 exit decision: PASSED on its pre-registered gates, on controlled data only,** with the material caveat in §P.4.
 
 **Runs reported:**
 - **Column mode:** `results/phase1/column-full-1`, plus `column-full-2` for determinism; `column-smoke-1` and `column-smoke-2`.
 - **Per-value mode:** `results/phase1/full-1`, plus `full-2` and `full-3` for determinism; `smoke-1` and `smoke-2`. `full-3` was re-run alongside column mode and has 0 differences from `full-1`.
+
+## P. P1 evaluation and Phase 1 exit (measured 2026-10-24)
+P1 is the akshara token table with byte fallback (`codec/p1/README.md`): vocabulary `p1-akshara-ascii-v1`, SHA-256 `8c85586c…`, 65,536 entries, 445,193 bytes, frozen before any measurement. It runs as HCC1 codec 2, next to the three unchanged baselines.
+
+**Datasets** (controlled, harness validation only, **not reviewed by native speakers, not representative**):
+- `phase1-kn-hi-v1`: SHA-256 `359269f4…36bb6fc`.
+- `phase1-en-mixed-v1`: SHA-256 `6c4685c2…31d47b0`.
+- Both checksums are unchanged.
+
+### P.1 Commands and outcomes
+```bash
+python3 -I codec/p1/build_vocabulary.py                                          # ×3, identical sha256 8c85586c…
+cmake --build external/token-vldb2026/build-arm64 --target hashcode_p1_tests hashcode_column_tests phase1_column_harness hashcode_roundtrip_tests   # exit 0
+external/token-vldb2026/build-arm64/hashcode_tests/hashcode_p1_tests           # exit 0: 7,652 / 7,652 assertions, 7 test cases
+external/token-vldb2026/build-arm64/hashcode_tests/hashcode_column_tests       # exit 0: 697 / 697
+external/token-vldb2026/build-arm64/hashcode_tests/hashcode_roundtrip_tests "~[empty]"   # exit 42: 21,730 / 21,737, the same 7 known failures (Phase 0 Findings 3 and 4)
+external/token-vldb2026/build-arm64/test/test                                  # exit 42: 57,640 / 57,642, the same 2 known upstream discrepancies
+python3 -I benchmarks/phase1/run_column_benchmark.py --dataset kn-hi-v1 --smoke --run-id p1-kn-hi-column-smoke-1        # 12 rows ok
+python3 -I benchmarks/phase1/run_column_benchmark.py --dataset kn-hi-v1 --run-id p1-kn-hi-column-full-1                 # 120 rows ok, 0 problems
+python3 -I benchmarks/phase1/run_column_benchmark.py --dataset kn-hi-v1 --run-id p1-kn-hi-column-full-2                 # compare with -full-1: 0 differences
+python3 -I benchmarks/phase1/run_column_benchmark.py --dataset en-mixed-v1 --smoke --run-id p1-en-mixed-column-smoke-1  # 12 rows ok
+python3 -I benchmarks/phase1/run_column_benchmark.py --dataset en-mixed-v1 --run-id p1-en-mixed-column-full-1           # 128 rows ok, 0 problems
+python3 -I benchmarks/phase1/run_column_benchmark.py --dataset en-mixed-v1 --run-id p1-en-mixed-column-full-2           # compare with -full-1: 0 differences
+python3 -I benchmarks/phase1/audit_column_results.py results/phase1/<each of the 6 P1 runs>                               # 0 problems each
+python3 -I benchmarks/phase1/evaluate_d2.py --out results/phase1/p1-d2-evaluation \
+  --run kn-hi-v1=results/phase1/p1-kn-hi-column-full-1 --frozen kn-hi-v1=results/phase1/column-full-1 \
+  --run en-mixed-v1=results/phase1/p1-en-mixed-column-full-1 --frozen en-mixed-v1=results/phase1/en-mixed-column-full-1   # exit 0, 0 baseline-integrity problems
+```
+Test logs are in `results/phase1/p1_build_and_test_logs/`.
+
+### P.2 Correctness and reproducibility
+- **P1 tests** cover:
+  - empty input, ASCII, Hindi, Kannada, mixed scripts, emoji/ZWJ/₹, embedded NUL, LF/CRLF, invalid UTF-8, all 256 byte values, and both forms of canonically equivalent text;
+  - every prefix cut, including cuts inside a character;
+  - expected token boundaries, fallback counts, and a no-read-past-input check;
+  - rejection of malformed blobs, and P1 inside HCC1 with empty values;
+  - a structural check that the vocabulary isn't derived from data;
+  - that the C++ table ID equals the build's SHA-256.
+- **Benchmark:** all 248 P1-run rows are exact, value by value, in order, and the containers are byte-identical across 7 repetitions and across the two runs.
+- **Frozen baselines reproduced:** the raw, OpenAI200K and Gemma3 rows in the P1 runs match `column-full-1` and `en-mixed-column-full-1` on all 21 non-timing columns.
+
+### P.3 D2 result (pre-registered: median reduction against `baseline_c` of at least 5%)
+| Group | Columns | **Median reduction vs `baseline_c`** | Columns at least 5% better | Range | D2 |
+|---|---|---|---|---|---|
+| hi | 8 | **+14.7%** | 4 | −329.0% … +55.1% | met |
+| kn | 8 | **+17.0%** | 5 | −257.9% … +52.3% | met |
+| en | 8 | **+27.0%** | 7 | −57.2% … +57.0% | met |
+| en-hi | 8 | **+28.7%** | 6 | −211.9% … +56.9% | met |
+| en-kn | 8 | **+32.5%** | 6 | −190.5% … +59.5% | met |
+
+The per-column figures are in `results/phase1/p1-d2-evaluation/d2_per_column.csv`. Smallest method across the 40 columns: P1 on 22, raw on 7, OpenAI200K on 6, Gemma3 on 5.
+
+### P.4 Caveat: the pass comes from per-column overhead, not from the akshara vocabulary
+- **Byte-weighted, P1 loses.** Summed over the 40 evaluation columns:
+
+  | | Bytes |
+  |---|---|
+  | raw | 43,859 |
+  | best `sgtt` | **12,300** |
+  | P1 | **23,223** (88.8% more than best `sgtt`) |
+
+  On the grouped language columns:
+
+  | Column | P1 | Best `sgtt` | P1 vs best `sgtt` |
+  |---|---|---|---|
+  | `col-hi-all` | 6,146 | 1,642 | −274% |
+  | `col-kn-all` | 6,709 | 3,742 | −79% |
+  | `col-en-hi-all` | 3,543 | 1,404 | −152% |
+  | `col-en-kn-all` | 3,499 | 1,428 | −145% |
+  | `col-en-all` | 2,562 | 3,185 | **+19.6%** |
+
+- **Where P1 wins:** in **all 29** columns where P1 beats `baseline_c`, P1 spends *more* bytes on token IDs than `sgtt`. It wins only through lower fixed per-column cost: no bitmap (`sgtt` Dense costs 25–153 B), and a 13-byte instead of 24-byte footer. Most evaluation columns are small, so the median favours this.
+- **Where P1 loses:** every `repeated` column (−57% to −329%) and most `medium` and `long` Indic columns.
+  - `sgtt` matches whole words of up to 16 bytes with 1–2-byte Dense IDs.
+  - P1 matches one akshara (3–6 bytes) per 2-byte ID.
+- **Fallback:** 24.4% of P1 tokens on `kn-hi-v1` and 24.7% on `en-mixed-v1` are single-byte fallbacks. Most are spaces (87% and 63%), because the vocabulary has no entries that combine a space with an akshara.
+- **P1 against raw:** smaller on 33 of 40 columns. Raw is smaller on all 5 `tiny` columns, and on `col-en-punct_numerals` and `col-en-structured`.
+- **Conclusion:** the pre-registered criterion is met and is reported as met. The evidence does **not** support "the akshara vocabulary compresses Hindi or Kannada better than `sgtt`"; on the byte-heavy columns it shows the opposite. A median over 8 small synthetic columns per group isn't a good proxy for storage cost. Phase 2 must use a byte-weighted criterion (`docs/phase2_proposal.md`).
+
+### P.5 Vocabulary and amortization
+- **Shared static vocabularies, not charged per column:**
+
+  | Codec | Bytes |
+  |---|---|
+  | P1 | **445,193** |
+  | OpenAI200K | 3,332,170 |
+  | Gemma3 | 4,275,024 |
+
+- **P1 break-even against raw HCC1** (linear extrapolation from these columns; not measured): ≈1.06 MB of text for `hi`, 0.89 MB `kn`, 0.80 MB `en`, 0.95 MB `en-hi`, 0.86 MB `en-kn`. These come from `vocabulary / ((raw − P1) / original)` on `col-<lang>-all`.
+- The vocabulary is 7–10× smaller than the `sgtt` ones, but that only matters if it has to be stored per column, and here it doesn't.
+
+### P.6 Timing (`col-all`, median of 7, Release; this machine only)
+| | Encoder setup | Encode | Decoder setup | Decode |
+|---|---|---|---|---|
+| P1, `kn-hi` | 9.19 ms | 0.93 ms | 9.14 ms | 0.035 ms |
+| P1, `en-mixed` | 9.45 ms | 0.87 ms | 9.38 ms | 0.049 ms |
+| OpenAI200K, `kn-hi` | 2.73 ms | 0.25 ms | 2.57 ms | 0.053 ms |
+| Gemma3, `kn-hi` | 3.34 ms | 0.31 ms | 3.83 ms | 0.053 ms |
+
+P1's setup reads the vocabulary file, builds 15 hash maps and computes a SHA-256. None of P1's timing was optimized.
+
+### P.7 Phase 1 exit decision
+**PASSED, for the pre-registered Phase 1 scope (harness validation on controlled data).** Evidence:
+- the harness and baselines are validated and reproducible;
+- P1 is implemented with exact reconstruction (7,652 test assertions; 248 / 248 benchmark rows);
+- the vocabulary doesn't use evaluation data;
+- all storage is accounted for, and the vocabulary is reported separately;
+- D2 is met in 5 / 5 groups.
+
+**Not established, and blocked:**
+- any claim about real Hindi, Kannada, English or code-mixed data (D3 needs approval);
+- any claim that P1 is a better codec; the byte-weighted result is negative (§P.4);
+- Linux x86-64, AVX-512, and sanitizer runs of the P1 and column code.
 
 ## C. Column mode (primary)
 The format is defined in `docs/phase1_column_protocol.md`: an HCC1 container holding a varint length table and one unmodified upstream blob of the concatenated values. Upstream has no native column API for `sgtt`.

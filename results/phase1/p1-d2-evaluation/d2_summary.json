@@ -1,0 +1,119 @@
+{
+  "threshold_percent": 5.0,
+  "runs": {
+    "kn-hi-v1": "results/phase1/p1-kn-hi-column-full-1",
+    "en-mixed-v1": "results/phase1/p1-en-mixed-column-full-1"
+  },
+  "frozen": {
+    "kn-hi-v1": "results/phase1/column-full-1",
+    "en-mixed-v1": "results/phase1/en-mixed-column-full-1"
+  },
+  "baseline_integrity_problems": [],
+  "groups": [
+    {
+      "dataset": "kn-hi-v1",
+      "language": "hi",
+      "columns": 8,
+      "median_reduction_percent": "14.6691",
+      "min_reduction_percent": "-329.0472",
+      "max_reduction_percent": "55.0725",
+      "columns_with_reduction_ge_5": 4,
+      "d2_met": true
+    },
+    {
+      "dataset": "kn-hi-v1",
+      "language": "kn",
+      "columns": 8,
+      "median_reduction_percent": "17.0220",
+      "min_reduction_percent": "-257.9021",
+      "max_reduction_percent": "52.3077",
+      "columns_with_reduction_ge_5": 5,
+      "d2_met": true
+    },
+    {
+      "dataset": "kn-hi-v1",
+      "language": "hi",
+      "context_column": "col-hi-all",
+      "raw_total": 10558,
+      "best_sgtt_total": 1642,
+      "p1_total": 6146,
+      "p1_vs_best_sgtt_percent": "-274.2996",
+      "p1_shared_vocabulary_bytes": 445193,
+      "p1_break_even_original_bytes_vs_raw": "1060613"
+    },
+    {
+      "dataset": "kn-hi-v1",
+      "language": "kn",
+      "context_column": "col-kn-all",
+      "raw_total": 13441,
+      "best_sgtt_total": 3742,
+      "p1_total": 6709,
+      "p1_vs_best_sgtt_percent": "-79.2892",
+      "p1_shared_vocabulary_bytes": 445193,
+      "p1_break_even_original_bytes_vs_raw": "885558"
+    },
+    {
+      "dataset": "en-mixed-v1",
+      "language": "en",
+      "columns": 8,
+      "median_reduction_percent": "27.0461",
+      "min_reduction_percent": "-57.2428",
+      "max_reduction_percent": "57.0000",
+      "columns_with_reduction_ge_5": 7,
+      "d2_met": true
+    },
+    {
+      "dataset": "en-mixed-v1",
+      "language": "en-hi",
+      "columns": 8,
+      "median_reduction_percent": "28.7472",
+      "min_reduction_percent": "-211.8705",
+      "max_reduction_percent": "56.9231",
+      "columns_with_reduction_ge_5": 6,
+      "d2_met": true
+    },
+    {
+      "dataset": "en-mixed-v1",
+      "language": "en-kn",
+      "columns": 8,
+      "median_reduction_percent": "32.5348",
+      "min_reduction_percent": "-190.5085",
+      "max_reduction_percent": "59.4595",
+      "columns_with_reduction_ge_5": 6,
+      "d2_met": true
+    },
+    {
+      "dataset": "en-mixed-v1",
+      "language": "en",
+      "context_column": "col-en-all",
+      "raw_total": 5714,
+      "best_sgtt_total": 3185,
+      "p1_total": 2562,
+      "p1_vs_best_sgtt_percent": "19.5604",
+      "p1_shared_vocabulary_bytes": 445193,
+      "p1_break_even_original_bytes_vs_raw": "800133"
+    },
+    {
+      "dataset": "en-mixed-v1",
+      "language": "en-hi",
+      "context_column": "col-en-hi-all",
+      "raw_total": 6620,
+      "best_sgtt_total": 1404,
+      "p1_total": 3543,
+      "p1_vs_best_sgtt_percent": "-152.3504",
+      "p1_shared_vocabulary_bytes": 445193,
+      "p1_break_even_original_bytes_vs_raw": "952600"
+    },
+    {
+      "dataset": "en-mixed-v1",
+      "language": "en-kn",
+      "context_column": "col-en-kn-all",
+      "raw_total": 7224,
+      "best_sgtt_total": 1428,
+      "p1_total": 3499,
+      "p1_vs_best_sgtt_percent": "-145.0280",
+      "p1_shared_vocabulary_bytes": 445193,
+      "p1_break_even_original_bytes_vs_raw": "859073"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 #pragma once
 // Project-owned column container (format "HCC1") wrapping the unmodified upstream codec blob.
 // Layout (all methods):
-//   magic "HCC1" (4) | version u8 = 1 | codec u8 (0 raw, 1 sgtt)                       -> header_bytes = 6
+//   magic "HCC1" (4) | version u8 = 1 | codec u8 (0 raw, 1 sgtt, 2 P1)                 -> header_bytes = 6
 //   varint value_count | value_count x varint byte_length | varint blob_length            -> boundary_metadata_bytes
 //   blob: raw = concatenated value bytes; sgtt = upstream Compressor::compress output of the
 //         concatenated value bytes (token IDs | dense bitmap | 24-byte footer). Absent when blob_length == 0.
@@ -24,7 +24,7 @@ inline constexpr uint8_t formatVersion = 1;
 inline constexpr size_t headerBytes = 6;
 inline constexpr size_t sgttFooterBytes = 24;
 inline constexpr size_t upstreamInputPadding = 16;
-enum class Codec : uint8_t { Raw = 0, Sgtt = 1 };
+enum class Codec : uint8_t { Raw = 0, Sgtt = 1, P1 = 2 };
 //---------------------------------------------------------------------------
 inline void putVarint(std::vector<std::byte>& out, uint64_t v) {
    do {
@@ -94,7 +94,7 @@ inline Parsed parse(std::span<const std::byte> in) {
    if (in.size() < headerBytes || std::memcmp(in.data(), magic, 4) != 0) throw std::runtime_error("HCC1: bad magic");
    if (static_cast<uint8_t>(in[4]) != formatVersion) throw std::runtime_error("HCC1: unsupported version");
    auto codecByte = static_cast<uint8_t>(in[5]);
-   if (codecByte > 1) throw std::runtime_error("HCC1: unknown codec");
+   if (codecByte > 2) throw std::runtime_error("HCC1: unknown codec");
    Parsed p{static_cast<Codec>(codecByte), {}, {}, {}};
    p.layout.header = headerBytes;
    size_t pos = headerBytes;

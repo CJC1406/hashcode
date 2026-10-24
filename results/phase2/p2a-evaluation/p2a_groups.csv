@@ -1,0 +1,6 @@
+dataset,language,columns,original,raw,baseline,p1,p2a,p1_ids,p2a_ids,baseline_ids,p1_tokens,p2a_tokens,p1_fallback,p2a_fallback,byte_weighted_p2a_vs_baseline_percent,byte_weighted_p1_vs_baseline_percent,byte_weighted_p2a_vs_p1_percent,byte_weighted_p2a_vs_raw_percent,payload_only_p2a_vs_baseline_percent,median_p2a_vs_baseline_percent,median_p1_vs_baseline_percent,fallback_share_p1,fallback_share_p2a,byte_weighted_5pct_vs_baseline_met
+kn-hi-v1,hi,8,10511,10619,2479,6297,4694,6086,4484,1191,3043,2242,871,70,-89.3505,-154.0137,25.4566,55.7962,-276.4903,27.0007,14.6691,0.2862,0.0312,False
+kn-hi-v1,kn,8,13391,13502,2861,6860,5757,6646,5544,1701,3323,2772,684,133,-101.2233,-139.7763,16.0787,57.3619,-225.9259,27.5873,17.0220,0.2058,0.0480,False
+en-mixed-v1,en,8,5665,5775,2656,2721,2721,2508,2508,1262,1254,1254,233,233,-2.4473,-2.4473,0.0000,52.8831,-98.7322,27.0461,27.0461,0.1858,0.1858,False
+en-mixed-v1,en-hi,8,6584,6679,2129,3693,2840,3494,2642,916,1747,1321,514,88,-33.3960,-73.4617,23.0978,57.4787,-188.4279,35.0202,28.7472,0.2942,0.0666,False
+en-mixed-v1,en-kn,8,7188,7284,2175,3652,3078,3454,2880,974,1727,1440,421,134,-41.5172,-67.9080,15.7174,57.7430,-195.6879,35.8868,32.5348,0.2438,0.0931,False

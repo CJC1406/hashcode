@@ -8,3 +8,9 @@ set(HASHCODE_COLUMN_TARGETS "${CMAKE_CURRENT_LIST_DIR}/column_targets.cmake")
 cmake_language(DEFER DIRECTORY "${CMAKE_SOURCE_DIR}" CALL include "${HASHCODE_ROUNDTRIP_TARGETS}")
 cmake_language(DEFER DIRECTORY "${CMAKE_SOURCE_DIR}" CALL include "${HASHCODE_COLUMN_TARGETS}")
 cmake_language(DEFER DIRECTORY "${CMAKE_SOURCE_DIR}" CALL include "${HASHCODE_PHASE1_TARGETS}")
+# P1 must come after the Phase 1 targets: it adds include paths and definitions to phase1_column_harness.
+set(HASHCODE_P1_TARGETS "${CMAKE_CURRENT_LIST_DIR}/p1_targets.cmake")
+cmake_language(DEFER DIRECTORY "${CMAKE_SOURCE_DIR}" CALL include "${HASHCODE_P1_TARGETS}")
+# P2a reuses HASHCODE_P1_DEFINITIONS, so it must come after the P1 targets.
+set(HASHCODE_P2A_TARGETS "${CMAKE_CURRENT_LIST_DIR}/p2a_targets.cmake")
+cmake_language(DEFER DIRECTORY "${CMAKE_SOURCE_DIR}" CALL include "${HASHCODE_P2A_TARGETS}")

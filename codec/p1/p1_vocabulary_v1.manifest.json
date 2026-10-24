@@ -1,0 +1,31 @@
+{
+  "vocabulary": "p1-akshara-ascii-v1",
+  "entries": 65536,
+  "file_bytes": 445193,
+  "sha256": "8c85586c794d5589e7b640ebc0d2e9aa7a86e04ea28fe2dcf6ca4fb135ae2d43",
+  "table_id_hex": "8c85586c794d5589",
+  "max_token_bytes": 16,
+  "sections": {
+    "single_bytes": 256,
+    "devanagari_code_points": 128,
+    "devanagari_consonant_nukta": 53,
+    "devanagari_consonant_sign": 1484,
+    "devanagari_consonants": 53,
+    "devanagari_dependent_signs": 28,
+    "kannada_code_points": 91,
+    "kannada_consonant_nukta": 37,
+    "kannada_consonant_sign": 703,
+    "kannada_consonants": 37,
+    "kannada_dependent_signs": 19,
+    "ascii_from_o200k": 62784
+  },
+  "inputs": {
+    "unicodedata_version": "16.0.0",
+    "o200k.tiktoken": {
+      "path": "external/token-vldb2026/tokenizers/o200k.tiktoken",
+      "sha256": "446a9538cb6c348e3516120d7c08b09f57c36495e2acfffe59a5bf8b0cfb1a2d",
+      "entries": 199998
+    }
+  },
+  "evaluation_data_read": false
+}

@@ -49,11 +49,27 @@ For each phase:
 6. Record results and limitations.
 7. Prepare a phase completion report.
 
-##Current issue
+## Project status (updated 2026-10-24)
+Run project Git commands only from `/Users/cjc/Downloads/hashcode`. `/Users/cjc` is an unrelated repository.
 
-The original project build fails on Apple Silicon because compiler commands include Intel AVX-512 flags such as -mavx512f, -mavx512bw, -mavx512dq, and -mavx512vl.
+**Phase 1: complete for controlled harness validation** (`docs/phase1_benchmark_report.md` §P).
+- **P1** (`codec/p1/`, vocabulary SHA-256 `8c85586c…`):
+  - Exact reconstruction (7,652 test assertions; 248 / 248 benchmark rows).
+  - Deterministic vocabulary built without evaluation data; repeat runs identical.
+  - Met the pre-registered D2 median criterion in 5 / 5 language groups.
+- **But it is not a better codec:** byte-weighted over 40 columns, P1 is 88.8% larger than the best `sgtt` baseline (23,223 vs 12,300 bytes). Its encoding is about 3× slower, and about 24% of its tokens are single-byte fallbacks, mostly spaces.
 
-Investigate how the build configuration selects these flags and whether the project supports ARM64 or macOS.
+**Current phase: Phase 2** (`docs/phase2_proposal.md`, proposal not yet approved).
+- **Hypothesis H1:** space+akshara entries cut fallback.
+- **First experiment: P2a** (`codec/p2a/`, SHA-256 `c99ff52f…`), which is frozen P1 plus space+akshara entries.
+  - On the controlled data it cut fallback sharply and was 16–25% smaller than P1 for the Indic groups.
+  - It is still 55% larger than `sgtt` (19,090 vs 12,300 bytes; `docs/phase2_p2a_report.md`).
 
-Do not simply remove compiler flags or alter algorithms without understanding the implications. Identify the affected files and propose a minimal, reversible solution first.
-Current phase: Phase 0 — research and baseline reproduction.
+**Unproven:** any effectiveness on real Hindi, Kannada or code-mixed text.
+
+**Outstanding:**
+- D3 real-data approval: FLORES+ for evaluation only; a training source; a Kannada–English code-mixed source.
+- Linux x86-64 testing.
+- Sanitizer runs of the P1/P2a and column code.
+- Native-speaker review of the controlled datasets.
+- Both controlled datasets are for harness validation only.

@@ -3,7 +3,10 @@
 // Outputs: column measurements CSV, containers TSV (encoded column hex), decoded-values TSV (per value).
 // Usage: phase1_column_harness <columns.tsv> <measurements.csv> <containers.tsv> <decoded_values.tsv> <repetitions>
 #include "column_format.hpp"
+#include "p1_codec.hpp"
 #include "tokenizer/TokenizerConfig.hpp"
+#include <memory>
+#include <set>
 #include <algorithm>
 #include <chrono>
 #include <cstdio>
@@ -20,6 +23,7 @@ struct Method {
    std::string name, configuration;
    column::Codec codec;
    std::optional<compressor::CompressorConfig> config;
+   const char* vocabulary = nullptr;  // P1-format vocabulary file for Codec::P1 methods
 };
 //---------------------------------------------------------------------------
 std::vector<Method> methods() {
@@ -33,6 +37,8 @@ std::vector<Method> methods() {
       {"raw_utf8_column", "container=HCC1v1 codec=raw (concatenated value bytes)", column::Codec::Raw, std::nullopt},
       sgtt("sgtt_openai200k_column", tokenizer::OpenAI200K),
       sgtt("sgtt_gemma3_column", tokenizer::Gemma3),
+      {"p1_akshara_column", "container=HCC1v1 codec=p1 vocabulary=codec/p1/p1_vocabulary_v1.bin token_ids=u16 footer=BTT1v1+table_id(13B)", column::Codec::P1, std::nullopt, HASHCODE_P1_VOCABULARY},
+      {"p2a_space_akshara_column", "container=HCC1v1 codec=p1 vocabulary=codec/p2a/p2a_vocabulary_v1.bin token_ids=u16 footer=BTT1v1+table_id(13B)", column::Codec::P1, std::nullopt, HASHCODE_P2A_VOCABULARY},
    };
 }
 //---------------------------------------------------------------------------
@@ -135,7 +141,7 @@ struct Result {
    std::string status = "ok", error;
    uint64_t inputFingerprint = 0;
    size_t originalPayload = 0;
-   std::optional<uint64_t> tokens, tokenIdBytes, usedTokens;
+   std::optional<uint64_t> tokens, tokenIdBytes, usedTokens, fallbackTokens;
    size_t header = 0, boundary = 0, blob = 0, encodedPayload = 0, bitmap = 0, footer = 0, total = 0;
    uint64_t containerHash = 0, decodedFingerprint = 0;
    bool consistent = true, exact = false;
@@ -151,13 +157,18 @@ void measure(const Method& m, const Column& c, unsigned repetitions, Result& r) 
       // Encode: codec init | concatenate + codec + container serialization.
       auto t0 = Clock::now();
       std::unique_ptr<compressor::Compressor> encoder;
+      std::unique_ptr<p1::Vocabulary> encoderVocabulary;
       if (m.codec == column::Codec::Sgtt) encoder = compressor::Compressor::create(*m.config);
+      if (m.codec == column::Codec::P1) encoderVocabulary = std::make_unique<p1::Vocabulary>(m.vocabulary);
       auto t1 = Clock::now();
       auto payload = column::concatenate(c.values);
       std::vector<std::byte> blob;
+      size_t p1Tokens = 0, p1Fallback = 0;
       if (payload.size > 0) {
          if (m.codec == column::Codec::Raw) {
             blob.assign(payload.buffer.begin(), payload.buffer.begin() + payload.size);
+         } else if (m.codec == column::Codec::P1) {
+            blob = p1::encodeBlob(*encoderVocabulary, payload.bytes(), p1Tokens, p1Fallback);
          } else {
             blob.resize(10 * payload.size + 64);
             encoder->compress(payload.bytes(), blob);
@@ -173,22 +184,26 @@ void measure(const Method& m, const Column& c, unsigned repetitions, Result& r) 
       auto parsed = column::parse(container);
       std::vector<std::byte> owned(parsed.blob.begin(), parsed.blob.end());
       std::unique_ptr<compressor::Compressor> decoder;
+      std::unique_ptr<p1::Vocabulary> decoderVocabulary;
       std::vector<std::byte> decodedPayload;
       if (m.codec == column::Codec::Sgtt && !owned.empty()) {
          decoder = compressor::Compressor::create(*m.config, owned);
          decodedPayload.resize(2 * decoder->getUncompressedSize(owned));
       }
+      if (m.codec == column::Codec::P1 && !owned.empty()) decoderVocabulary = std::make_unique<p1::Vocabulary>(m.vocabulary);
       auto t4 = Clock::now();
       if (decoder) {
          std::vector<std::vector<std::byte>> temporaryBuffers;
          decoder->decompress(owned, decodedPayload, temporaryBuffers);
+      } else if (decoderVocabulary) {
+         decodedPayload = p1::decodeBlob(*decoderVocabulary, owned);
       } else if (m.codec == column::Codec::Raw) {
          decodedPayload = owned;
       }
       auto values = column::split(decodedPayload, parsed.lengths);
       auto t5 = Clock::now();
 
-      if (m.codec == column::Codec::Sgtt) {
+      if (m.codec == column::Codec::Sgtt || m.codec == column::Codec::P1) {
          r.codecInit.push_back(ms(t1 - t0));
          r.decoderInit.push_back(ms(t4 - t3));
       }
@@ -205,7 +220,17 @@ void measure(const Method& m, const Column& c, unsigned repetitions, Result& r) 
          r.containerHash = containerHash;
          if (m.codec == column::Codec::Raw) {
             r.encodedPayload = blob.size();
-         } else if (!blob.empty()) {
+         } else if (m.codec == column::Codec::P1 && !blob.empty()) {
+            r.tokens = p1Tokens;
+            r.tokenIdBytes = 2;
+            r.fallbackTokens = p1Fallback;
+            std::set<uint16_t> distinct;
+            for (size_t i = 0; i < 2 * p1Tokens; i += 2) distinct.insert(static_cast<uint16_t>(static_cast<uint8_t>(blob[i]) | (static_cast<uint8_t>(blob[i + 1]) << 8)));
+            r.usedTokens = distinct.size();
+            r.encodedPayload = 2 * p1Tokens;
+            r.footer = p1::footerBytes;
+            if (blob.size() != r.encodedPayload + r.footer) throw std::runtime_error("P1 blob size != token IDs + footer");
+         } else if (m.codec == column::Codec::Sgtt && !blob.empty()) {
             r.tokens = infoField(info, "tokens");
             auto bits = infoField(info, "token_id_size");
             if (bits) r.tokenIdBytes = *bits / 8;
@@ -251,7 +276,8 @@ int main(int argc, char** argv) {
    csv << "column_id,method,value_count,original_payload_bytes,input_sequence_fnv1a64,token_count,token_id_bytes,used_tokens,"
           "header_bytes,boundary_metadata_bytes,codec_blob_bytes,encoded_payload_bytes,bitmap_bytes,footer_bytes,total_stored_bytes,"
           "container_fnv1a64,encoded_consistent_across_reps,decoded_value_count,decoded_sequence_fnv1a64,exact_values,roundtrip_exact,"
-          "codec_init_ms_median,column_encode_ms_median,decoder_init_ms_median,column_decode_ms_median,timed_repetitions,status,error_message,configuration\n";
+          "codec_init_ms_median,column_encode_ms_median,decoder_init_ms_median,column_decode_ms_median,timed_repetitions,status,error_message,configuration,"
+          "fallback_tokens\n";
    containers << "column_id\tmethod\tcontainer_hex\n";
    decodedOut << "column_id\tmethod\tvalue_index\tsample_id\tdecoded_hex\n";
 
@@ -272,7 +298,7 @@ int main(int argc, char** argv) {
              << r.encodedPayload << ',' << r.bitmap << ',' << r.footer << ',' << r.total << ',' << r.containerHash << ',' << (r.consistent ? "true" : "false") << ','
              << r.decodedCount << ',' << r.decodedFingerprint << ',' << r.exactValues << ',' << (r.exact ? "true" : "false") << ','
              << median(r.codecInit) << ',' << median(r.encode) << ',' << median(r.decoderInit) << ',' << median(r.decode) << ',' << r.encode.size() << ','
-             << r.status << ',' << quote(r.error) << ',' << quote(m.configuration) << '\n';
+             << r.status << ',' << quote(r.error) << ',' << quote(m.configuration) << ',' << (r.fallbackTokens ? std::to_string(*r.fallbackTokens) : "") << '\n';
          containers << c.id << '\t' << m.name << '\t' << hex(r.container.data(), r.container.size()) << '\n';
          for (size_t i = 0; i < r.decoded.size(); ++i)
             decodedOut << c.id << '\t' << m.name << '\t' << i << '\t' << (i < c.sampleIds.size() ? c.sampleIds[i] : "") << '\t' << hex(r.decoded[i].data(), r.decoded[i].size()) << '\n';

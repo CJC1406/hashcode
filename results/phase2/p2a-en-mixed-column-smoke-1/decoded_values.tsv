@@ -1,0 +1,66 @@
+column_id	method	value_index	sample_id	decoded_hex
+col-smoke	raw_utf8_column	0	en-short-001	5468616e6b20796f75
+col-smoke	raw_utf8_column	1	en-structured-002	7b226964223a20313034322c202263697479223a202242656e67616c757275222c2022616374697665223a20747275657d
+col-smoke	raw_utf8_column	2	en-edge-002	6c696e65206f6e650a6c696e652074776f
+col-smoke	raw_utf8_column	3	en-tiny-001	
+col-smoke	raw_utf8_column	4	en-hi-medium-001	e0a495e0a4b220e0a495e0a580206d656574696e6720e0a4aee0a587e0a4822070726f6a65637420e0a495e0a4be2066696e616c2075706461746520736861726520e0a495e0a4b0e0a4a8e0a4be20e0a4b9e0a588e0a5a4
+col-smoke	raw_utf8_column	5	en-hi-edge-002	e0a4aae0a4b9e0a4b2e0a580206c696e650ae0a4a6e0a582e0a4b8e0a4b0e0a580206c696e65
+col-smoke	raw_utf8_column	6	en-hi-tiny-001	
+col-smoke	raw_utf8_column	7	en-kn-medium-001	e0b2a8e0b2bee0b2b3e0b386206d656574696e6720e0b2a8e0b2b2e0b38de0b2b2e0b2bf2070726f6a6563742066696e616c2075706461746520736861726520e0b2aee0b2bee0b2a1e0b2ace0b387e0b295e0b3812e
+col-smoke	raw_utf8_column	8	en-kn-structured-001	6974656d3de0b295e0b2bee0b2abe0b2bf3b7174793d323b70726963653d3430
+col-smoke	raw_utf8_column	9	en-kn-tiny-001	
+col-smoke	sgtt_openai200k_column	0	en-short-001	5468616e6b20796f75
+col-smoke	sgtt_openai200k_column	1	en-structured-002	7b226964223a20313034322c202263697479223a202242656e67616c757275222c2022616374697665223a20747275657d
+col-smoke	sgtt_openai200k_column	2	en-edge-002	6c696e65206f6e650a6c696e652074776f
+col-smoke	sgtt_openai200k_column	3	en-tiny-001	
+col-smoke	sgtt_openai200k_column	4	en-hi-medium-001	e0a495e0a4b220e0a495e0a580206d656574696e6720e0a4aee0a587e0a4822070726f6a65637420e0a495e0a4be2066696e616c2075706461746520736861726520e0a495e0a4b0e0a4a8e0a4be20e0a4b9e0a588e0a5a4
+col-smoke	sgtt_openai200k_column	5	en-hi-edge-002	e0a4aae0a4b9e0a4b2e0a580206c696e650ae0a4a6e0a582e0a4b8e0a4b0e0a580206c696e65
+col-smoke	sgtt_openai200k_column	6	en-hi-tiny-001	
+col-smoke	sgtt_openai200k_column	7	en-kn-medium-001	e0b2a8e0b2bee0b2b3e0b386206d656574696e6720e0b2a8e0b2b2e0b38de0b2b2e0b2bf2070726f6a6563742066696e616c2075706461746520736861726520e0b2aee0b2bee0b2a1e0b2ace0b387e0b295e0b3812e
+col-smoke	sgtt_openai200k_column	8	en-kn-structured-001	6974656d3de0b295e0b2bee0b2abe0b2bf3b7174793d323b70726963653d3430
+col-smoke	sgtt_openai200k_column	9	en-kn-tiny-001	
+col-smoke	sgtt_gemma3_column	0	en-short-001	5468616e6b20796f75
+col-smoke	sgtt_gemma3_column	1	en-structured-002	7b226964223a20313034322c202263697479223a202242656e67616c757275222c2022616374697665223a20747275657d
+col-smoke	sgtt_gemma3_column	2	en-edge-002	6c696e65206f6e650a6c696e652074776f
+col-smoke	sgtt_gemma3_column	3	en-tiny-001	
+col-smoke	sgtt_gemma3_column	4	en-hi-medium-001	e0a495e0a4b220e0a495e0a580206d656574696e6720e0a4aee0a587e0a4822070726f6a65637420e0a495e0a4be2066696e616c2075706461746520736861726520e0a495e0a4b0e0a4a8e0a4be20e0a4b9e0a588e0a5a4
+col-smoke	sgtt_gemma3_column	5	en-hi-edge-002	e0a4aae0a4b9e0a4b2e0a580206c696e650ae0a4a6e0a582e0a4b8e0a4b0e0a580206c696e65
+col-smoke	sgtt_gemma3_column	6	en-hi-tiny-001	
+col-smoke	sgtt_gemma3_column	7	en-kn-medium-001	e0b2a8e0b2bee0b2b3e0b386206d656574696e6720e0b2a8e0b2b2e0b38de0b2b2e0b2bf2070726f6a6563742066696e616c2075706461746520736861726520e0b2aee0b2bee0b2a1e0b2ace0b387e0b295e0b3812e
+col-smoke	sgtt_gemma3_column	8	en-kn-structured-001	6974656d3de0b295e0b2bee0b2abe0b2bf3b7174793d323b70726963653d3430
+col-smoke	sgtt_gemma3_column	9	en-kn-tiny-001	
+col-smoke	p1_akshara_column	0	en-short-001	5468616e6b20796f75
+col-smoke	p1_akshara_column	1	en-structured-002	7b226964223a20313034322c202263697479223a202242656e67616c757275222c2022616374697665223a20747275657d
+col-smoke	p1_akshara_column	2	en-edge-002	6c696e65206f6e650a6c696e652074776f
+col-smoke	p1_akshara_column	3	en-tiny-001	
+col-smoke	p1_akshara_column	4	en-hi-medium-001	e0a495e0a4b220e0a495e0a580206d656574696e6720e0a4aee0a587e0a4822070726f6a65637420e0a495e0a4be2066696e616c2075706461746520736861726520e0a495e0a4b0e0a4a8e0a4be20e0a4b9e0a588e0a5a4
+col-smoke	p1_akshara_column	5	en-hi-edge-002	e0a4aae0a4b9e0a4b2e0a580206c696e650ae0a4a6e0a582e0a4b8e0a4b0e0a580206c696e65
+col-smoke	p1_akshara_column	6	en-hi-tiny-001	
+col-smoke	p1_akshara_column	7	en-kn-medium-001	e0b2a8e0b2bee0b2b3e0b386206d656574696e6720e0b2a8e0b2b2e0b38de0b2b2e0b2bf2070726f6a6563742066696e616c2075706461746520736861726520e0b2aee0b2bee0b2a1e0b2ace0b387e0b295e0b3812e
+col-smoke	p1_akshara_column	8	en-kn-structured-001	6974656d3de0b295e0b2bee0b2abe0b2bf3b7174793d323b70726963653d3430
+col-smoke	p1_akshara_column	9	en-kn-tiny-001	
+col-smoke	p2a_space_akshara_column	0	en-short-001	5468616e6b20796f75
+col-smoke	p2a_space_akshara_column	1	en-structured-002	7b226964223a20313034322c202263697479223a202242656e67616c757275222c2022616374697665223a20747275657d
+col-smoke	p2a_space_akshara_column	2	en-edge-002	6c696e65206f6e650a6c696e652074776f
+col-smoke	p2a_space_akshara_column	3	en-tiny-001	
+col-smoke	p2a_space_akshara_column	4	en-hi-medium-001	e0a495e0a4b220e0a495e0a580206d656574696e6720e0a4aee0a587e0a4822070726f6a65637420e0a495e0a4be2066696e616c2075706461746520736861726520e0a495e0a4b0e0a4a8e0a4be20e0a4b9e0a588e0a5a4
+col-smoke	p2a_space_akshara_column	5	en-hi-edge-002	e0a4aae0a4b9e0a4b2e0a580206c696e650ae0a4a6e0a582e0a4b8e0a4b0e0a580206c696e65
+col-smoke	p2a_space_akshara_column	6	en-hi-tiny-001	
+col-smoke	p2a_space_akshara_column	7	en-kn-medium-001	e0b2a8e0b2bee0b2b3e0b386206d656574696e6720e0b2a8e0b2b2e0b38de0b2b2e0b2bf2070726f6a6563742066696e616c2075706461746520736861726520e0b2aee0b2bee0b2a1e0b2ace0b387e0b295e0b3812e
+col-smoke	p2a_space_akshara_column	8	en-kn-structured-001	6974656d3de0b295e0b2bee0b2abe0b2bf3b7174793d323b70726963653d3430
+col-smoke	p2a_space_akshara_column	9	en-kn-tiny-001	
+col-empty-values	raw_utf8_column	0	en-tiny-001	
+col-empty-values	raw_utf8_column	1	en-hi-tiny-001	
+col-empty-values	raw_utf8_column	2	en-kn-tiny-001	
+col-empty-values	sgtt_openai200k_column	0	en-tiny-001	
+col-empty-values	sgtt_openai200k_column	1	en-hi-tiny-001	
+col-empty-values	sgtt_openai200k_column	2	en-kn-tiny-001	
+col-empty-values	sgtt_gemma3_column	0	en-tiny-001	
+col-empty-values	sgtt_gemma3_column	1	en-hi-tiny-001	
+col-empty-values	sgtt_gemma3_column	2	en-kn-tiny-001	
+col-empty-values	p1_akshara_column	0	en-tiny-001	
+col-empty-values	p1_akshara_column	1	en-hi-tiny-001	
+col-empty-values	p1_akshara_column	2	en-kn-tiny-001	
+col-empty-values	p2a_space_akshara_column	0	en-tiny-001	
+col-empty-values	p2a_space_akshara_column	1	en-hi-tiny-001	
+col-empty-values	p2a_space_akshara_column	2	en-kn-tiny-001	

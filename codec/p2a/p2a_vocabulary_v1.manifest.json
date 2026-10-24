@@ -1,0 +1,40 @@
+{
+  "vocabulary": "p2a-space-akshara-v1",
+  "entries": 65536,
+  "file_bytes": 445881,
+  "sha256": "c99ff52fa92fa7c8be541c0358c10acd678aeaa98764bb474ef06077faa7face",
+  "table_id_hex": "c99ff52fa92fa7c8",
+  "max_token_bytes": 16,
+  "sections": {
+    "single_bytes": 256,
+    "akshara_from_p1": 2496,
+    "space_plus_akshara": 2496,
+    "ascii_from_p1": 60288,
+    "ascii_dropped_from_p1": 2496
+  },
+  "id_ranges": {
+    "single_bytes": [
+      0,
+      255
+    ],
+    "akshara": [
+      256,
+      2751
+    ],
+    "space_plus_akshara": [
+      2752,
+      5247
+    ],
+    "ascii": [
+      5248,
+      65535
+    ]
+  },
+  "inputs": {
+    "p1_vocabulary": {
+      "path": "codec/p1/p1_vocabulary_v1.bin",
+      "sha256": "8c85586c794d5589e7b640ebc0d2e9aa7a86e04ea28fe2dcf6ca4fb135ae2d43"
+    }
+  },
+  "evaluation_data_read": false
+}
